@@ -1,4 +1,4 @@
-#Copyright William Carter 2018
+#Copyright William Carter 2017-2018
 import turtle, random, time, sys
 
 wall_list = [
