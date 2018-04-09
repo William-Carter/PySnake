@@ -32,6 +32,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 
 window = turtle.Screen()
+window.title("PySnake 1.0")
 turtle.tracer(0, 0)
 setup = turtle.Turtle()
 setup.shape("square")
