@@ -61,6 +61,7 @@ line.hideturtle()
 def drawBoundary():
     global setup
     global wall_list
+    setup.clearstamps()
     for i in range(len(wall_list)):
         setup.setpos(wall_list[i])
         setup.stamp()
@@ -84,6 +85,7 @@ def removeLastStamp():
         snake.stamp()
     snake.setpos(returnpos)
 receive = 0
+
 #debug function for testing the snake's behaviour at high lengths
 #bound to P
 def placeCherry():
@@ -95,6 +97,7 @@ cherry = turtle.Turtle()
 cherry.shape("square")
 cherry.turtlesize(0.45)
 cherry.up()
+
 #spawning in the cherry
 def spawnCherry():
     global cherry
@@ -110,6 +113,7 @@ def spawnCherry():
             cherry.color("red")
             cherry.stamp()
             meme = False
+            
 #custom function to stamp the snake and add it to the stamp list
 def stampify(var):
     var.stamp()
@@ -134,16 +138,19 @@ def snakeleft():
     if not snake.heading() == 0 and count != counter555:
         snake.seth(180)
         count = counter555
+        
 def snakeright():
     global snake, counter555, count
     if not snake.heading() == 180 and count != counter555:
        snake.seth(0)
        count = counter555
+       
 def snakeup():
     global snake, counter555, count
     if not snake.heading() == 270 and count != counter555:
        snake.seth(90)
        count = counter555
+       
 def snakedown():
     global snake, counter555, count
     if not snake.heading() == 90 and count != counter555:
