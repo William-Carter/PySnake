@@ -1,6 +1,8 @@
 #Copyright William Carter 2018
 import turtle, random, time, sys
 
+#light, dark, gray
+theme = "dark"
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
      (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
@@ -30,15 +32,30 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 
 
-
+#defining the game window and it's properties
 window = turtle.Screen()
-window.title("PySnake 1.0")
+window.title("PySnake 1.1 Beta")
+if theme == "light":
+    window.bgcolor("white")
+elif theme == "dark":
+    window.bgcolor("black")
+elif theme == "gray":
+    window.bgcolor("dark gray")
+    
 turtle.tracer(0, 0)
+
+#defining the setup turtle
 setup = turtle.Turtle()
 setup.shape("square")
 setup.turtlesize(0.45)
 setup.speed(0)
 setup.up()
+if theme == "light":
+    setup.color("black")
+elif theme == "dark":
+    setup.color("white")
+elif theme == "gray":
+    setup.color("light gray")
 
 #defining the gridlines
 line = turtle.Turtle()
@@ -56,22 +73,25 @@ for n in range(len(lineListX)):
     line.down()
     line.seth(180)
     line.forward(160)
+line.hideturtle()
 
-line.hideturtle()    
+#making a function to draw onto the screen a wall_list array
 def drawBoundary():
     global setup
     global wall_list
+    setup.clearstamps()
     for i in range(len(wall_list)):
         setup.setpos(wall_list[i])
         setup.stamp()
-#drawing the screen
+        
+#drawing the wall_list
 drawBoundary()
-#hiding setup, moving onto next stage
 setup.hideturtle()
+
 #updating the screen to give the player a sense of where they will be playing
 turtle.update()
 
-#Wipes all stamps, removes the oldest stamp and then replaces all those remaining
+#wipes all stamps, removes the oldest stamp and then replaces all those remaining
 def removeLastStamp():
     global stampList
     global snake
@@ -84,8 +104,9 @@ def removeLastStamp():
         snake.stamp()
     snake.setpos(returnpos)
 receive = 0
+
 #debug function for testing the snake's behaviour at high lengths
-#bound to P
+#commented out bind to P in the control array
 def placeCherry():
     global receive
     receive = 1
@@ -95,6 +116,13 @@ cherry = turtle.Turtle()
 cherry.shape("square")
 cherry.turtlesize(0.45)
 cherry.up()
+if theme == "light":
+    cherry.color("red")
+elif theme == "dark":
+    cherry.color("light blue")
+
+elif theme == "gray":
+    cherry.color("white")
 #spawning in the cherry
 def spawnCherry():
     global cherry
@@ -107,20 +135,28 @@ def spawnCherry():
         cherry.setpos(spot1, spot2)
         if not cherry.pos() in stampList:
             cherryList.append(cherry.pos())
-            cherry.color("red")
             cherry.stamp()
             meme = False
+            
 #custom function to stamp the snake and add it to the stamp list
 def stampify(var):
     var.stamp()
     stampList.append((round(var.xcor(),2),round(var.ycor(),2)))
 
 stampList = []
+
+
 #defining the snake
 snake = turtle.Turtle()
 snake.seth(270)
 snake.up()
-snake.color("dark green")
+if theme == "light":
+    snake.color("dark green")
+elif theme == "dark":
+    snake.color("orange")
+
+elif theme == "gray":
+    snake.color("gray")
 snake.shape("square")
 snake.turtlesize(0.45)
 snake.setpos(0, 50)
@@ -134,16 +170,19 @@ def snakeleft():
     if not snake.heading() == 0 and count != counter555:
         snake.seth(180)
         count = counter555
+        
 def snakeright():
     global snake, counter555, count
     if not snake.heading() == 180 and count != counter555:
        snake.seth(0)
        count = counter555
+       
 def snakeup():
     global snake, counter555, count
     if not snake.heading() == 270 and count != counter555:
        snake.seth(90)
        count = counter555
+       
 def snakedown():
     global snake, counter555, count
     if not snake.heading() == 90 and count != counter555:
@@ -176,20 +215,26 @@ def check():
         sys.exit()
     if snake.pos() in cherryList:
         receive = 1
-#setting up the keys to move the snake   
+
+        
+#control array  
 window.onkeypress(snakeup, "w")
 window.onkeypress(snakedown, "s")
 window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
 window.onkeypress(sys.exit, "q")
-window.onkeypress(placeCherry, "p")
+#window.onkeypress(placeCherry, "p")
+
 window.listen()
+
+
 #final setup for main loop
 spawnCherry()
 counter555 = 0
 score = 0
-#delay for the player to click onto the window
+
 time.sleep(2)
+
 #loop that uses previously defined functions to run the game
 while True:
 
