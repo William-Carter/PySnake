@@ -2,7 +2,7 @@
 import turtle, random, time, sys
 
 #light, dark, gray
-theme = "dark"
+theme = "light"
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
      (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
@@ -20,7 +20,9 @@ wall_list = [
      (10, 110), (20, 110), (30, 110), (40, 110), (50, 110), (60, 110),
      (70, 110), (80, 110), (90, 110), (100, 110)
 ]
+
 cherryList = []
+
 lineListY = [(-35, -50), (-25, -50), (-15, -50), (-5, -50), (5, -50), (15, -50),
             (25, -50), (35, -50), (45, -50), (55, -50), (65, -50), (75, -50),
             (85, -50), (95, -50)]
@@ -34,7 +36,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 #defining the game window and it's properties
 window = turtle.Screen()
-window.title("PySnake 1.1 Beta")
+window.title("PySnake 1.1")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
