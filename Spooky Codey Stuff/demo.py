@@ -36,7 +36,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 #defining the game window and it's properties
 window = turtle.Screen()
-window.title("PySnake 2.0 Beta")
+window.title("PySnake 1.1")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
@@ -85,13 +85,52 @@ def drawBoundary():
     for i in range(len(wall_list)):
         setup.setpos(wall_list[i])
         setup.stamp()
-        
+
+
+
+#changing the theme during play for demo purposes
+def changeTheme():
+    global theme, snake, cherry, setup, window
+    if theme == "light":
+        theme = "dark"
+    elif theme == "dark":
+        theme = "gray"
+    elif theme == "gray":
+        theme = "light"
+
+
+    if theme == "light":
+        setup.color("black")
+        snake.color("dark green")
+        cherry.color("red")
+        window.bgcolor("white")
+    elif theme == "dark":
+        setup.color("white")
+        snake.color("orange")
+        cherry.color("light blue")
+        window.bgcolor("black")
+    elif theme == "gray":
+        setup.color("light gray")
+        snake.color("gray")
+        cherry.color("white")
+        window.bgcolor("dark gray")
+
+    drawBoundary()
+    drawSnake()
+    turtle.update()
+    
+    
+    
+
+    
 #drawing the wall_list
 drawBoundary()
 setup.hideturtle()
 
 #updating the screen to give the player a sense of where they will be playing
 turtle.update()
+
+
 
 #draws the body of the snake
 def drawSnake():
@@ -230,6 +269,7 @@ window.onkeypress(snakedown, "s")
 window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
 window.onkeypress(sys.exit, "q")
+window.onkeypress(changeTheme, "m")
 #window.onkeypress(placeCherry, "p")#
 
 window.listen()
