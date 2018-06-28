@@ -29,7 +29,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 
 window = turtle.Screen()
-window.title("PySnake 2.0")
+window.title("PySnake 2.0.1")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
@@ -55,7 +55,7 @@ elif theme == "dark":
     setup.color("white")
 elif theme == "gray":
     setup.color("light gray")
-setup.write("PySnake 2.0", font=("Arial", 64, "normal"), align = "center")
+setup.write("PySnake 2.0.1", font=("Arial", 64, "normal"), align = "center")
 setup.setpos(0, -250)
 setup.write("Press space to start", font=("Arial", 32, "normal"), align = "center")
 line = turtle.Turtle()
@@ -313,7 +313,7 @@ def demoCheck():
 
 
 def reset():
-    global high_score
+    global high_score, cherryList
     cherry.clearstamps()
     global snake
     global stampList
@@ -335,7 +335,7 @@ def reset():
     spawnCherry()
 
 def resetDemo():
-    global high_score
+    global high_score, cherryList
     cherry.clearstamps()
     global snake
     global stampList
