@@ -1,7 +1,5 @@
-#Copyright William Carter 2018
 import turtle, random, time, sys
 
-#light, dark, gray
 theme = "light"
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
@@ -19,9 +17,7 @@ wall_list = [
      (-40, 110), (-30, 110), (-20, 110), (-10, 110), (0, 110),
      (10, 110), (20, 110), (30, 110), (40, 110), (50, 110), (60, 110),
      (70, 110), (80, 110), (90, 110), (100, 110)
-]
-
-cherryList = []
+     ]
 
 lineListY = [(-35, -50), (-25, -50), (-15, -50), (-5, -50), (5, -50), (15, -50),
             (25, -50), (35, -50), (45, -50), (55, -50), (65, -50), (75, -50),
@@ -29,14 +25,11 @@ lineListY = [(-35, -50), (-25, -50), (-15, -50), (-5, -50), (5, -50), (15, -50),
 
 lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
             (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
-            (110, 85), (110, 95)]
+            (110, 85), (110, 95), (110, 105)]
 
 
-
-
-#defining the game window and it's properties
 window = turtle.Screen()
-window.title("PySnake 2.0 Beta")
+window.title("PySnake 2.0")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
@@ -46,20 +39,25 @@ elif theme == "gray":
     
 turtle.tracer(0, 0)
 
-#defining the setup turtle
+
+
 setup = turtle.Turtle()
+setup.hideturtle()
+setup.up()
+setup.setpos(0, 200)
+
 setup.shape("square")
 setup.turtlesize(0.45)
 setup.speed(0)
-setup.up()
 if theme == "light":
     setup.color("black")
 elif theme == "dark":
     setup.color("white")
 elif theme == "gray":
     setup.color("light gray")
-
-#defining the gridlines
+setup.write("PySnake 2.0", font=("Arial", 64, "normal"), align = "center")
+setup.setpos(0, -250)
+setup.write("Press space to start", font=("Arial", 32, "normal"), align = "center")
 line = turtle.Turtle()
 line.color("gray")
 for m in range(len(lineListY)):
@@ -77,7 +75,6 @@ for n in range(len(lineListX)):
     line.forward(160)
 line.hideturtle()
 
-#making a function to draw onto the screen a wall_list array
 def drawBoundary():
     global setup
     global wall_list
@@ -85,15 +82,52 @@ def drawBoundary():
     for i in range(len(wall_list)):
         setup.setpos(wall_list[i])
         setup.stamp()
+
+
+def changeTheme():
+    global theme, snake, cherry, setup, window, drawturt
+    if theme == "light":
+        theme = "dark"
+    elif theme == "dark":
+        theme = "gray"
+    elif theme == "gray":
+        theme = "light"
+
+
+    if theme == "light":
+        setup.color("black")
+        snake.color("dark green")
+        cherry.color("red")
+        window.bgcolor("white")
+        drawturt.color("black")
+        highscore.color("black")
         
-#drawing the wall_list
+    elif theme == "dark":
+        setup.color("white")
+        snake.color("orange")
+        cherry.color("light blue")
+        window.bgcolor("black")
+        drawturt.color("white")
+        highscore.color("white")
+        
+    elif theme == "gray":
+        setup.color("light gray")
+        snake.color("gray")
+        cherry.color("white")
+        window.bgcolor("dark gray")
+        drawturt.color("light gray")
+        highscore.color("light gray")
+    
+    drawBoundary()
+    drawHighScore()
+    scoreify(score)
+    drawSnake()
+    turtle.update()
+
+
 drawBoundary()
-setup.hideturtle()
 
-#updating the screen to give the player a sense of where they will be playing
-turtle.update()
 
-#draws the body of the snake
 def drawSnake():
     snake.clearstamps()
     returnpos = snake.pos()
@@ -101,8 +135,8 @@ def drawSnake():
         snake.setpos(stampList[j])
         snake.stamp()
     snake.setpos(returnpos)
-    
-#wipes all stamps, removes the oldest stamp and then replaces all those remaining
+
+
 def removeLastStamp():
     global stampList
     global snake
@@ -112,13 +146,10 @@ def removeLastStamp():
     
 receive = 0
 
-#debug function for testing the snake's behaviour at high lengths
-#commented out bind to P in the control array
 def placeCherry():
     global receive
     receive = 1
 
-#defining cherry
 cherry = turtle.Turtle()
 cherry.shape("square")
 cherry.turtlesize(0.45)
@@ -127,10 +158,9 @@ if theme == "light":
     cherry.color("red")
 elif theme == "dark":
     cherry.color("light blue")
-
 elif theme == "gray":
     cherry.color("white")
-#spawning in the cherry
+
 def spawnCherry():
     global cherry
     global stampList
@@ -144,15 +174,24 @@ def spawnCherry():
             cherryList.append(cherry.pos())
             cherry.stamp()
             meme = False
-            
-#custom function to stamp the snake and add it to the stamp list
+
+
 def stampify(var):
     var.stamp()
     stampList.append((round(var.xcor(),2),round(var.ycor(),2)))
 
 stampList = []
 
-
+def updateTextTheme():
+    if theme == "light":
+     
+        
+        drawturt.color("black")
+    elif theme == "dark":
+    
+        drawturt.color("white")
+    elif theme == "gray":
+       drawturt.color("light gray")
 #defining the snake
 snake = turtle.Turtle()
 snake.seth(270)
@@ -166,12 +205,12 @@ elif theme == "gray":
     snake.color("gray")
 snake.shape("square")
 snake.turtlesize(0.45)
-snake.setpos(0, 50)
+snake.setpos(30, 50)
 stampify(snake)
-snake.setpos(0, 40)
+snake.setpos(30, 40)
 stampify(snake)
 count = 0
-#making the functions for moving the snake
+
 def snakeleft():
     global snake, counter555, count
     if not snake.heading() == 0 and count != counter555:
@@ -196,8 +235,6 @@ def snakedown():
         snake.seth(270)
         count = counter555
 
-#unnecessary function that could easily have been raw code because it's only
-#referenced once in the entire script
 def cherryThisTurn():
     global receive
     if receive == 1:
@@ -205,46 +242,188 @@ def cherryThisTurn():
         return True
     if receive == 0:
         return False
-
-
-#main collision detection function
+high_score = 0
+score = 0
 def check():
     global wall_list
     global snake
     global receive
+    global score
     if snake.pos() in wall_list:
-        print("\nGame Over")
-        print(score)
-        sys.exit()
+        gameover()
+        
+        reset()
+        score = 0
     if snake.pos() in stampList:
-        print("\nGame Over")
-        print(score)
-        sys.exit()
+        gameover()
+        
+        reset()
+        score = 0
     if snake.pos() in cherryList:
         receive = 1
 
+demo = True
+
+def stopDemo():
+    global demo
+    demo = False
+
+drawturt = turtle.Turtle()
+drawturt.hideturtle()
+drawturt.up()
+if theme == "light":
+    drawturt.color("black")
+elif theme == "dark":
+    drawturt.color("white")
+elif theme == "gray":
+    drawturt.color("light gray")
+
+    
+def gameover():
+    drawturt.setpos(0, 200)
+    drawturt.write("Game Over", font=("Arial", 64, "normal"), align = "center")
+    drawturt.setpos(0, 150)
+    drawturt.write("You Scored "+str(score)+" points", font=("Arial", 32, "normal"), align = "center")
+    time.sleep(1)
+    drawturt.clear()
+
+window.onkeypress(stopDemo, "space")
+
+window.listen()
+
+
+def customCherry(x, y):
+    global cherry
+    cherry.setpos(x, y)
+    cherry.stamp()
+
+def demoCheck():
+    global wall_list
+    global snake
+    global receive
+    if snake.pos() in wall_list:
+        resetDemo()
         
-#control array  
+     
+    if snake.pos() in stampList:
+        resetDemo()
+        
+    if snake.pos() in cherryList:
+        receive = 1
+
+
+def reset():
+    global high_score
+    cherry.clearstamps()
+    global snake
+    global stampList
+    stampList = []
+    snake.clearstamps()
+    snake.setpos(30, 50)
+    stampify(snake)
+    snake.setpos(30, 40)
+    stampify(snake)
+    snake.setpos(30, 30)
+    time.sleep(0.5)
+    snake.seth(270)
+    cherry.clearstamps()
+    cherryList = []
+    if score > high_score:
+        high_score = score
+    drawHighScore()
+
+    spawnCherry()
+
+def resetDemo():
+    global high_score
+    cherry.clearstamps()
+    global snake
+    global stampList
+    stampList = []
+    snake.clearstamps()
+    snake.setpos(30, 50)
+    stampify(snake)
+    snake.setpos(30, 40)
+    stampify(snake)
+    snake.setpos(30, 30)
+    time.sleep(0.5)
+    snake.seth(270)
+    cherry.clearstamps()
+    cherryList = []
+
+    spawnCherry()
+
+highscore = turtle.Turtle()
+highscore.hideturtle()
+highscore.up()
+def drawHighScore():
+    global high_score
+    highscore.setpos(-290, 200)
+    highscore.clear()
+    highscore.write(high_score, font=("Arial", 40, "normal"), align = "center")
+    
+def scoreify(x):
+    global drawturt
+    drawturt.clear()
+    drawturt.setpos(290, 200)
+    drawturt.write(x, font=("Arial", 40, "normal"), align = "center")
+    
+    
+
+cherryList = []
+spawnCherry()
+counter555 = 0
+movecount = 0
+while demo:
+    movecount += 1
+    turtle.update()
+    snake.forward(10)
+    counter555 += 1
+    time.sleep(0.09)
+    snake.setpos(round(snake.xcor(),2),round(snake.ycor(),2))
+    if movecount == 2:
+        movecount = 0
+        thiccchic = ["up", "down", "left", "right"]
+        rand = random.choice(thiccchic)
+        if rand == "up":
+            snakeup()
+        if rand == "down":
+            snakedown()
+        if rand == "left":
+            snakeleft()
+        if rand == "right":
+            snakeright()
+
+    demoCheck()
+    if not cherryThisTurn():
+        removeLastStamp()
+        stampify(snake)
+    else:
+        stampify(snake)
+        cherry.clearstamps()
+        cherryList = []
+        spawnCherry()
+        
+    
+        
+
+
+
+setup.clear()
+drawBoundary()
+reset()
+demo = False
 window.onkeypress(snakeup, "w")
 window.onkeypress(snakedown, "s")
 window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
 window.onkeypress(sys.exit, "q")
-#window.onkeypress(placeCherry, "p")#
-
-window.listen()
-
-
-#final setup for main loop
-spawnCherry()
-counter555 = 0
+window.onkeypress(changeTheme, "m")
+high_score = 0
 score = 0
-
-time.sleep(2)
-
-#loop that uses previously defined functions to run the game
+snake.seth(270)
 while True:
-
+    scoreify(score)
     turtle.update()
     snake.forward(10)
     counter555 += 1
@@ -260,12 +439,3 @@ while True:
         cherryList = []
         spawnCherry()
         score += 1
-        
-
-
-
-    
-
-
-
-
