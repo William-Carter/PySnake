@@ -1,3 +1,5 @@
+#Copyright William Carter 2018
+
 import turtle, random, time, sys
 
 theme = "light"
@@ -29,7 +31,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 
 window = turtle.Screen()
-window.title("PySnake 2.0.1")
+window.title("PySnake 2.0.2")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
@@ -55,9 +57,12 @@ elif theme == "dark":
     setup.color("white")
 elif theme == "gray":
     setup.color("light gray")
-setup.write("PySnake 2.0.1", font=("Arial", 64, "normal"), align = "center")
+    
+setup.write("PySnake 2.0", font=("Arial", 64, "normal"), align = "center")
 setup.setpos(0, -250)
 setup.write("Press space to start", font=("Arial", 32, "normal"), align = "center")
+
+
 line = turtle.Turtle()
 line.color("gray")
 for m in range(len(lineListY)):
@@ -192,6 +197,7 @@ def updateTextTheme():
         drawturt.color("white")
     elif theme == "gray":
        drawturt.color("light gray")
+       
 #defining the snake
 snake = turtle.Turtle()
 snake.seth(270)
@@ -200,9 +206,9 @@ if theme == "light":
     snake.color("dark green")
 elif theme == "dark":
     snake.color("orange")
-
 elif theme == "gray":
     snake.color("gray")
+    
 snake.shape("square")
 snake.turtlesize(0.45)
 snake.setpos(30, 50)
@@ -235,6 +241,7 @@ def snakedown():
         snake.seth(270)
         count = counter555
 
+
 def cherryThisTurn():
     global receive
     if receive == 1:
@@ -242,6 +249,7 @@ def cherryThisTurn():
         return True
     if receive == 0:
         return False
+    
 high_score = 0
 score = 0
 def check():
@@ -330,6 +338,7 @@ def reset():
     cherryList = []
     if score > high_score:
         high_score = score
+        newHighScore()
     drawHighScore()
 
     spawnCherry()
@@ -356,6 +365,11 @@ def resetDemo():
 highscore = turtle.Turtle()
 highscore.hideturtle()
 highscore.up()
+
+def newHighScore():
+    f = open("highscore.txt", "w")
+    f.write(str(high_score))
+    f.close
 def drawHighScore():
     global high_score
     highscore.setpos(-290, 200)
@@ -419,9 +433,12 @@ window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
 window.onkeypress(sys.exit, "q")
 window.onkeypress(changeTheme, "m")
-high_score = 0
+file = open("highscore.txt", "r")
+high_score = int(file.readlines()[1])
+file.close()
 score = 0
 snake.seth(270)
+drawHighScore()
 while True:
     scoreify(score)
     turtle.update()
