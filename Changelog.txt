@@ -1,0 +1,3 @@
+>Added local highscore storage
+>Changed menu screen to exclude minimal releases
+>Added changelog file
