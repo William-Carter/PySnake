@@ -31,7 +31,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 
 window = turtle.Screen()
-window.title("PySnake 2.0.3")
+window.title("PySnake 2.0.4")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
@@ -369,8 +369,9 @@ highscore.up()
 def newHighScore():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     f = open(dir_path+"/highscore.txt", "w")
+    f.write("#If you're going to cheat, at least bloody modify the code to do it. Don't be lazy.\n")
     f.write(str(high_score))
-    f.close
+    f.close()
 def drawHighScore():
     global high_score
     highscore.setpos(-290, 200)

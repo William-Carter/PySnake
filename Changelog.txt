@@ -1,1 +1,1 @@
->Re-enabled the ability to run from executable
+>Fixed bug making game unplayable after saving highscore
