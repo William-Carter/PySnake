@@ -1,6 +1,6 @@
 #Copyright William Carter 2018
 
-import turtle, random, time, sys
+import turtle, random, time, sys, os
 
 theme = "light"
 wall_list = [
@@ -31,7 +31,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 
 
 window = turtle.Screen()
-window.title("PySnake 2.0.2")
+window.title("PySnake 2.0.3")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
@@ -367,7 +367,8 @@ highscore.hideturtle()
 highscore.up()
 
 def newHighScore():
-    f = open("highscore.txt", "w")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    f = open(dir_path+"/highscore.txt", "w")
     f.write(str(high_score))
     f.close
 def drawHighScore():
@@ -433,7 +434,8 @@ window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
 window.onkeypress(sys.exit, "q")
 window.onkeypress(changeTheme, "m")
-file = open("highscore.txt", "r")
+dir_path = os.path.dirname(os.path.realpath(__file__))
+file = open(dir_path+"/highscore.txt", "r")
 high_score = int(file.readlines()[1])
 file.close()
 score = 0
