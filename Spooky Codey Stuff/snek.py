@@ -32,7 +32,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 rng_seed = 0
 
 window = turtle.Screen()
-window.title("PySnake 2.0.4")
+window.title("PySnake 2.0.5")
 if theme == "light":
     window.bgcolor("white")
 elif theme == "dark":
