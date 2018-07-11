@@ -29,6 +29,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
             (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
             (110, 85), (110, 95), (110, 105)]
 
+rng_seed = 0
 
 window = turtle.Screen()
 window.title("PySnake 2.0.4")
@@ -41,7 +42,8 @@ elif theme == "gray":
     
 turtle.tracer(0, 0)
 
-
+def diey():
+    sys.exit()
 
 setup = turtle.Turtle()
 setup.hideturtle()
@@ -169,11 +171,33 @@ elif theme == "gray":
 def spawnCherry():
     global cherry
     global stampList
+    global rng_seed
     meme = True
-    lis = [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    allList = [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    listNeg = [-40, -30, -20, -10, 0, 10, 20, 30]
+    listPos = [30, 40, 50, 60, 70, 80, 90, 100]
     while meme:
-        spot1 = int(random.choice(lis))
-        spot2 = int(random.choice(lis))
+        global rng_seed
+
+
+        if rng_seed == 0:
+            spot1 = int(random.choice(listNeg))
+            spot2 = int(random.choice(listPos))
+
+        elif rng_seed == 1:
+            spot1 = int(random.choice(listNeg))
+            spot2 = int(random.choice(listNeg))
+
+        elif rng_seed == 2:
+            spot1 = int(random.choice(listPos))
+            spot2 = int(random.choice(listPos))
+
+        elif rng_seed == 3:
+            spot1 = int(random.choice(listPos))
+            spot2 = int(random.choice(listNeg))
+            
+            
+        
         cherry.setpos(spot1, spot2)
         if not cherry.pos() in stampList:
             cherryList.append(cherry.pos())
@@ -217,26 +241,33 @@ snake.setpos(30, 40)
 stampify(snake)
 count = 0
 
+
+rng_seed = 0
+
 def snakeleft():
-    global snake, counter555, count
+    global snake, counter555, count, rng_seed
+    rng_seed = 0
     if not snake.heading() == 0 and count != counter555:
         snake.seth(180)
         count = counter555
         
 def snakeright():
-    global snake, counter555, count
+    global snake, counter555, count, rng_seed
+    rng_seed = 1
     if not snake.heading() == 180 and count != counter555:
        snake.seth(0)
        count = counter555
        
 def snakeup():
-    global snake, counter555, count
+    global snake, counter555, count, rng_seed
+    rng_seed = 2
     if not snake.heading() == 270 and count != counter555:
        snake.seth(90)
        count = counter555
        
 def snakedown():
-    global snake, counter555, count
+    global snake, counter555, count, rng_seed
+    rng_seed = 3
     if not snake.heading() == 90 and count != counter555:
         snake.seth(270)
         count = counter555
@@ -332,13 +363,15 @@ def reset():
     snake.setpos(30, 40)
     stampify(snake)
     snake.setpos(30, 30)
-    time.sleep(0.5)
     snake.seth(270)
     cherry.clearstamps()
     cherryList = []
     if score > high_score:
         high_score = score
         newHighScore()
+    
+    time.sleep(0.5)
+    
     drawHighScore()
 
     spawnCherry()
@@ -424,16 +457,17 @@ while demo:
         
 
 
-
+resetDemo()
 setup.clear()
 drawBoundary()
+snake.clear()
 reset()
 demo = False
 window.onkeypress(snakeup, "w")
 window.onkeypress(snakedown, "s")
 window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
-window.onkeypress(sys.exit, "q")
+window.onkeypress(diey, "q")
 window.onkeypress(changeTheme, "m")
 dir_path = os.path.dirname(os.path.realpath(__file__))
 file = open(dir_path+"/highscore.txt", "r")
