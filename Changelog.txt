@@ -1,1 +1,4 @@
->Made cherry spawning less random, instead depending on your actions
+>Added Idle and Classic themes
+>Changed how themes are initially set/updated
+>Pretty much just spent a few hours screwing around with the theme system until it didn't suck
+

@@ -2,6 +2,8 @@
 
 import turtle, random, time, sys, os
 
+
+#light, dark, gray, idle, classic
 theme = "light"
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
@@ -32,18 +34,15 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 rng_seed = 0
 
 window = turtle.Screen()
-window.title("PySnake 2.0.5")
-if theme == "light":
-    window.bgcolor("white")
-elif theme == "dark":
-    window.bgcolor("black")
-elif theme == "gray":
-    window.bgcolor("dark gray")
+window.title("PySnake 2.0.6")
+
+
+
     
 turtle.tracer(0, 0)
 
-def diey():
-    sys.exit()
+
+
 
 setup = turtle.Turtle()
 setup.hideturtle()
@@ -53,12 +52,8 @@ setup.setpos(0, 200)
 setup.shape("square")
 setup.turtlesize(0.45)
 setup.speed(0)
-if theme == "light":
-    setup.color("black")
-elif theme == "dark":
-    setup.color("white")
-elif theme == "gray":
-    setup.color("light gray")
+
+
     
 setup.write("PySnake 2.0", font=("Arial", 64, "normal"), align = "center")
 setup.setpos(0, -250)
@@ -67,19 +62,24 @@ setup.write("Press space to start", font=("Arial", 32, "normal"), align = "cente
 
 line = turtle.Turtle()
 line.color("gray")
-for m in range(len(lineListY)):
-    line.up()
-    line.setpos(lineListY[m])
-    line.down()
-    line.seth(90)
-    line.forward(160)
 
-for n in range(len(lineListX)):
-    line.up()
-    line.setpos(lineListX[n])
-    line.down()
-    line.seth(180)
-    line.forward(160)
+def drawLines():
+    global line
+    line.clear()
+    for m in range(len(lineListY)):
+        line.up()
+        line.setpos(lineListY[m])
+        line.down()
+        line.seth(90)
+        line.forward(160)
+
+    for n in range(len(lineListX)):
+        line.up()
+        line.setpos(lineListX[n])
+        line.down()
+        line.seth(180)
+        line.forward(160)
+drawLines()
 line.hideturtle()
 
 def drawBoundary():
@@ -92,13 +92,33 @@ def drawBoundary():
 
 
 def changeTheme():
-    global theme, snake, cherry, setup, window, drawturt
     if theme == "light":
-        theme = "dark"
+        setTheme("dark")
     elif theme == "dark":
-        theme = "gray"
+        setTheme("gray")
     elif theme == "gray":
+        setTheme("idle")
+    elif theme == "idle":
+        setTheme("classic")
+    elif theme == "classic":
+        setTheme("light")
+    
+
+
+def setTheme(them):
+    global theme, snake, cherry, setup, window, drawturt
+    if them == "light":
         theme = "light"
+    elif them == "dark":
+        theme = "dark"
+    elif them == "gray":
+        theme = "gray"
+    elif them == "idle":
+        theme = "idle"
+    elif them == "classic":
+        theme = "classic"
+
+    
 
 
     if theme == "light":
@@ -108,6 +128,7 @@ def changeTheme():
         window.bgcolor("white")
         drawturt.color("black")
         highscore.color("black")
+        line.color("dark gray")
         
     elif theme == "dark":
         setup.color("white")
@@ -116,6 +137,7 @@ def changeTheme():
         window.bgcolor("black")
         drawturt.color("white")
         highscore.color("white")
+        line.color("gray")
         
     elif theme == "gray":
         setup.color("light gray")
@@ -124,7 +146,27 @@ def changeTheme():
         window.bgcolor("dark gray")
         drawturt.color("light gray")
         highscore.color("light gray")
-    
+        line.color("gray")
+
+    elif theme == "idle":
+        setup.color("white")
+        snake.color("#EA9337")
+        cherry.color("#6BEF4A")
+        window.bgcolor("#124779")
+        drawturt.color("white")
+        highscore.color("white")
+        line.color("gray")
+
+    elif theme == "classic":
+        setup.color("black")
+        snake.color("black")
+        cherry.color("red")
+        window.bgcolor("white")
+        drawturt.color("black")
+        highscore.color("black")
+        line.color("white")
+        
+    drawLines()
     drawBoundary()
     drawHighScore()
     scoreify(score)
@@ -161,12 +203,6 @@ cherry = turtle.Turtle()
 cherry.shape("square")
 cherry.turtlesize(0.45)
 cherry.up()
-if theme == "light":
-    cherry.color("red")
-elif theme == "dark":
-    cherry.color("light blue")
-elif theme == "gray":
-    cherry.color("white")
 
 def spawnCherry():
     global cherry
@@ -211,16 +247,7 @@ def stampify(var):
 
 stampList = []
 
-def updateTextTheme():
-    if theme == "light":
-     
-        
-        drawturt.color("black")
-    elif theme == "dark":
-    
-        drawturt.color("white")
-    elif theme == "gray":
-       drawturt.color("light gray")
+
        
 #defining the snake
 snake = turtle.Turtle()
@@ -243,6 +270,7 @@ count = 0
 
 
 rng_seed = 0
+
 
 def snakeleft():
     global snake, counter555, count, rng_seed
@@ -310,12 +338,6 @@ def stopDemo():
 drawturt = turtle.Turtle()
 drawturt.hideturtle()
 drawturt.up()
-if theme == "light":
-    drawturt.color("black")
-elif theme == "dark":
-    drawturt.color("white")
-elif theme == "gray":
-    drawturt.color("light gray")
 
     
 def gameover():
@@ -423,6 +445,7 @@ cherryList = []
 spawnCherry()
 counter555 = 0
 movecount = 0
+setTheme(theme)
 while demo:
     movecount += 1
     turtle.update()
@@ -463,11 +486,11 @@ drawBoundary()
 snake.clear()
 reset()
 demo = False
+
 window.onkeypress(snakeup, "w")
 window.onkeypress(snakedown, "s")
 window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
-window.onkeypress(diey, "q")
 window.onkeypress(changeTheme, "m")
 dir_path = os.path.dirname(os.path.realpath(__file__))
 file = open(dir_path+"/highscore.txt", "r")
@@ -476,13 +499,15 @@ file.close()
 score = 0
 snake.seth(270)
 drawHighScore()
+
+
 while True:
     scoreify(score)
     turtle.update()
     snake.forward(10)
     counter555 += 1
     time.sleep(0.09)
-    snake.setpos(round(snake.xcor(),2),round(snake.ycor(),2))
+    snake.setpos(round(snake.xcor(),0),round(snake.ycor(),0))
     check()
     if not cherryThisTurn():
         removeLastStamp()
