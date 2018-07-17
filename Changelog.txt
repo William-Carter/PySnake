@@ -1,4 +1,10 @@
->Added Idle and Classic themes
->Changed how themes are initially set/updated
->Pretty much just spent a few hours screwing around with the theme system until it didn't suck
+Changelog:
+>Added settings page, accessible from main menu
+>Removed in game theme changing
+>Fundamentally changed the structure of the game (again)
+
+To do:
+>Add local settings storage for theme and future items
+>Add more settings items (Gridlines, game speed, etc.)
+>Get some more themes going
 
