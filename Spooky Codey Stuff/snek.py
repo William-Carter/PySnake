@@ -411,6 +411,7 @@ def startDemo():
     cherry.showturtle()
     window.onkeypress(startGame, "space")
     window.onkeypress(openSettings, "h")
+    window.onkeypress(None, "1")
     setup.clear()
     setup.setpos(0, 200)
     
