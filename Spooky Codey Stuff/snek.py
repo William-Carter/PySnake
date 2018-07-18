@@ -4,7 +4,7 @@ import turtle, random, time, sys, os
 
 
 #light, dark, gray, idle, classic
-theme = "classic"
+theme = "light"
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
      (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
@@ -34,7 +34,7 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
 rng_seed = 0
 
 window = turtle.Screen()
-window.title("PySnake 2.1.0")
+window.title("PySnake 2.1.1")
 
 
 
@@ -417,7 +417,7 @@ def startDemo():
     
     settingsBoi.clear()
     
-    setup.write("PySnake 2.0", font=("Arial", 64, "normal"), align = "center")
+    setup.write("PySnake 2.1", font=("Arial", 64, "normal"), align = "center")
     setup.setpos(0, -250)
     setup.write("Press Space to Start", font=("Arial", 32, "normal"), align = "center")
     setup.setpos(0, -300)

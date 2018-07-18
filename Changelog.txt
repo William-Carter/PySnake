@@ -1,10 +1,9 @@
 Changelog:
->Added settings page, accessible from main menu
->Removed in game theme changing
->Fundamentally changed the structure of the game (again)
+>Fixed issue where it was possible to change theme at wrong time (see #12)
+
 
 To do:
 >Add local settings storage for theme and future items
 >Add more settings items (Gridlines, game speed, etc.)
 >Get some more themes going
-
+>Fix glitchy menu screen bug (see #11)
