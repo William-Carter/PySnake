@@ -1,8 +1,6 @@
 #Copyright William Carter 2018
-
 import turtle, random, time, sys, os
-
-
+canToggleSettings = True
 #light, dark, gray, idle, classic
 theme = "light"
 wall_list = [
@@ -18,7 +16,7 @@ wall_list = [
      (10, -50), (20, -50), (30, -50), (40, -50), (50, -50), (60, -50),
      (70, -50), (80, -50), (90, -50), (100, -50),
 
-     (-40, 110), (-30, 110), (-20, 110), (-10, 110), (0, 110),
+    (-40, 110), (-30, 110), (-20, 110), (-10, 110), (0, 110),
      (10, 110), (20, 110), (30, 110), (40, 110), (50, 110), (60, 110),
      (70, 110), (80, 110), (90, 110), (100, 110)
      ]
@@ -31,10 +29,12 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
             (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
             (110, 85), (110, 95), (110, 105)]
 
+
+
 rng_seed = 0
 
 window = turtle.Screen()
-window.title("PySnake 2.1.1")
+window.title("PySnake 2.1.2")
 
 
 
@@ -186,6 +186,8 @@ def setTheme(them):
         setup.setpos(0, -250)
         setup.write("Press H to return", font=("Arial", 32, "normal"), align = "center")
 
+    
+
 
 
 
@@ -286,28 +288,32 @@ settingsBoi.up()
 
 
 def openSettings():
-    global settingsOpen
-    stopDemo()
-    line.clear()
-    window.onkeypress(None, "space")
-    window.onkeypress(startDemo, "h")
-    settingsOpen = True
-    setup.clear()
-    setup.setpos(0, 200)
-    setup.write("Settings", font=("Arial", 32, "normal"), align = "center")
-    setup.setpos(0, -250)
-    setup.write("Press H to return", font=("Arial", 32, "normal"), align = "center")
-    snake.clearstamps()
-    cherry.clearstamps()
-    snake.hideturtle()
-    cherry.hideturtle()
-    settingsBoi.setpos(-200, 100)
-    window.onkeypress(settingsTheme, "1")
-    settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align = "left")
-    
+    global settingsOpen, canToggleSettings
+    if canToggleSettings:
+        canToggleSettings = False
+        demoCounter = 0
+        stopDemo()
+        line.clear()
+        window.onkeypress(None, "space")
+        window.onkeypress(startDemo, "h")
+        settingsOpen = True
+        setup.clear()
+        setup.setpos(0, 200)
+        setup.write("Settings", font=("Arial", 32, "normal"), align = "center")
+        setup.setpos(0, -250)
+        setup.write("Press H to return", font=("Arial", 32, "normal"), align = "center")
+        snake.clearstamps()
+        cherry.clearstamps()
+        snake.hideturtle()
+        cherry.hideturtle()
+        settingsBoi.setpos(-200, 100)
+        window.onkeypress(settingsTheme, "1")
+        settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align = "left")
+        demoCounter = 0
+        turtle.update()
     
 
-    
+
 rng_seed = 0
 
 
@@ -403,28 +409,32 @@ window.listen()
 
 
 def startDemo():
-    global demo, noStart, settingsOpen
-    demo = True
-    noStart = True
-    settingsOpen = False
-    snake.showturtle()
-    cherry.showturtle()
-    window.onkeypress(startGame, "space")
-    window.onkeypress(openSettings, "h")
-    window.onkeypress(None, "1")
-    setup.clear()
-    setup.setpos(0, 200)
-    
-    settingsBoi.clear()
-    
-    setup.write("PySnake 2.1", font=("Arial", 64, "normal"), align = "center")
-    setup.setpos(0, -250)
-    setup.write("Press Space to Start", font=("Arial", 32, "normal"), align = "center")
-    setup.setpos(0, -300)
-    setup.write("Press H for Settings", font=("Arial", 24, "normal"), align = "center")
+    global demo, noStart, settingsOpen, canToggleSettings, demoCounter
+    if canToggleSettings:
+        demo = True
+        noStart = True
+        settingsOpen = False
+        snake.showturtle()
+        cherry.showturtle()
+        window.onkeypress(startGame, "space")
+        window.onkeypress(openSettings, "h")
+        window.onkey(None, "1")
+        setup.clear()
+        setup.setpos(0, 200)
+        
+        settingsBoi.clear()
+        
+        setup.write("PySnake 2.1", font=("Arial", 64, "normal"), align = "center")
+        setup.setpos(0, -250)
+        setup.write("Press Space to Start", font=("Arial", 32, "normal"), align = "center")
+        setup.setpos(0, -300)
+        setup.write("Press H for Settings", font=("Arial", 24, "normal"), align = "center")
 
-    drawBoundary()
-    setTheme(theme)
+        drawBoundary()
+        setTheme(theme)
+        canToggleSettings = False
+        demoCounter = 0
+        turtle.update()
 
 
 def customCherry(x, y):
@@ -484,7 +494,7 @@ def resetDemo():
     snake.setpos(30, 40)
     stampify(snake)
     snake.setpos(30, 30)
-    time.sleep(0.5)
+    time.sleep(0.0)
     snake.seth(270)
     cherry.clearstamps()
     cherryList = []
@@ -522,7 +532,11 @@ movecount = 0
 setTheme(theme)
 startDemo()
 noStart = True
+demoCounter = 0
+canToggleSettings = False
 while noStart:
+    canToggleSettings = True
+   
     turtle.update()
     if demo:
         movecount += 1
@@ -555,13 +569,13 @@ while noStart:
             spawnCherry()
 
 
-    #elif settingsOpen:
-        
-            
-    
-        
+    if demoCounter < 5:
+        demoCounter += 1
 
-
+    elif demoCounter == 5:
+        canToggleSettings = True
+        
+        
 resetDemo()
 setup.clear()
 drawBoundary()
@@ -589,7 +603,7 @@ while True:
     turtle.update()
     snake.forward(10)
     counter555 += 1
-    time.sleep(0.09)
+    time.sleep(0.1)
     snake.setpos(round(snake.xcor(),0),round(snake.ycor(),0))
     check()
     if not cherryThisTurn():

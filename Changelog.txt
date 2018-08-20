@@ -1,5 +1,5 @@
 Changelog:
->Fixed issue where it was possible to change theme at wrong time (see #12)
+>Made things better overall
 
 
 To do:
