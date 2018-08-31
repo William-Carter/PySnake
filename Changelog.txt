@@ -1,9 +1,9 @@
 Changelog:
->Made things better overall
+>Changed added local theme storage
+>Fixed bug where the game couldn't be run on Windows (see #14)
 
 
 To do:
->Add local settings storage for theme and future items
 >Add more settings items (Gridlines, game speed, etc.)
 >Get some more themes going
 >Fix glitchy menu screen bug (see #11)

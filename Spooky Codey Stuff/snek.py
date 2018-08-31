@@ -1,8 +1,8 @@
 #Copyright William Carter 2018
 import turtle, random, time, sys, os
 canToggleSettings = True
-#light, dark, gray, idle, classic
-theme = "light"
+print(sys.platform)
+opSystem = sys.platform
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
      (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
@@ -29,12 +29,19 @@ lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
             (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
             (110, 85), (110, 95), (110, 105)]
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+if sys.platform == "linux" or "darwin":
+    f = open(dir_path+"/theme.txt", "r")
+elif sys.platform == "win32" or "cygwin":
+    f = open(dir_path+"\theme.txt", "r")
 
+theme = f.read() 
+f.close()
 
 rng_seed = 0
 
 window = turtle.Screen()
-window.title("PySnake 2.1.2")
+window.title("PySnake 2.1.3")
 
 
 
@@ -56,6 +63,8 @@ setup.speed(0)
 
 line = turtle.Turtle()
 line.color("gray")
+
+
 
 def drawLines():
     global line
@@ -86,16 +95,29 @@ def drawBoundary():
 
 
 def changeTheme():
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    if sys.platform == "linux" or "darwin":
+        f = open(dir_path+"/theme.txt", "w")
+    elif sys.platform == "win32" or "cygwin":
+        f = open(dir_path+"\theme.txt", "w")
+        
     if theme == "light":
         setTheme("dark")
+        f.write("dark")
     elif theme == "dark":
         setTheme("gray")
+        f.write("gray")
     elif theme == "gray":
         setTheme("idle")
+        f.write("idle")
     elif theme == "idle":
         setTheme("classic")
+        f.write("classic")
     elif theme == "classic":
         setTheme("light")
+        f.write("light")
+
+    f.close()
     
 def settingsTheme():
     changeTheme()
@@ -261,6 +283,8 @@ def spawnCherry():
 def stampify(var):
     var.stamp()
     stampList.append((round(var.xcor(),2),round(var.ycor(),2)))
+
+
 
 stampList = []
 
