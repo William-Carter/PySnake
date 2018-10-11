@@ -1,3 +1,0 @@
-echo "To run PySnake, you need Python 3. Download it at https://www.python.org/downloads/"
-script_full_path=$(dirname "$0");
-python3 "$script_full_path/Spooky Codey Stuff/snek.py"

@@ -1,6 +1,7 @@
 Changelog:
->Changed added local theme storage
->Fixed bug where the game couldn't be run on Windows (see #14)
+>Fixed bug where theme could be changed after closing settings
+>Adjusted way version number is drawn
+>Merged Mac and Linux executables
 
 
 To do:

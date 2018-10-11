@@ -1,8 +1,27 @@
 #Copyright William Carter 2018
 import turtle, random, time, sys, os
 canToggleSettings = True
-print(sys.platform)
 opSystem = sys.platform
+
+pysnakeVersion = (2,1,4)
+
+
+def returnVersion(precision):
+    global pysnakeVersion
+    empty = ""
+    counter = 0
+    
+    for i in range(precision-1):
+        empty = empty+str(pysnakeVersion[i])
+        empty = empty+"."
+    empty = empty+str(pysnakeVersion[precision-1])
+    return empty
+
+    
+        
+
+    
+    
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
      (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
@@ -41,7 +60,7 @@ f.close()
 rng_seed = 0
 
 window = turtle.Screen()
-window.title("PySnake 2.1.3")
+window.title(returnVersion(3))
 
 
 
@@ -63,7 +82,6 @@ setup.speed(0)
 
 line = turtle.Turtle()
 line.color("gray")
-
 
 
 def drawLines():
@@ -442,13 +460,14 @@ def startDemo():
         cherry.showturtle()
         window.onkeypress(startGame, "space")
         window.onkeypress(openSettings, "h")
-        window.onkey(None, "1")
+        window.onkeypress(None, "1")
+        window.listen()
         setup.clear()
         setup.setpos(0, 200)
         
         settingsBoi.clear()
         
-        setup.write("PySnake 2.1", font=("Arial", 64, "normal"), align = "center")
+        setup.write("PySnake "+returnVersion(2), font=("Arial", 64, "normal"), align = "center")
         setup.setpos(0, -250)
         setup.write("Press Space to Start", font=("Arial", 32, "normal"), align = "center")
         setup.setpos(0, -300)
@@ -459,6 +478,7 @@ def startDemo():
         canToggleSettings = False
         demoCounter = 0
         turtle.update()
+        
 
 
 def customCherry(x, y):
@@ -613,6 +633,7 @@ window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
 #window.onkeypress(changeTheme, "m")
 window.onkeypress(None, "h")
+window.onkeypress(None, "1")
 dir_path = os.path.dirname(os.path.realpath(__file__))
 file = open(dir_path+"/highscore.txt", "r")
 high_score = int(file.readlines()[1])
@@ -620,6 +641,7 @@ file.close()
 score = 0
 snake.seth(270)
 drawHighScore()
+window.listen()
 
 
 while True:
