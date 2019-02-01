@@ -1,27 +1,38 @@
-#Copyright William Carter 2018
+#Copyright William Carter 2019
 import turtle, random, time, sys, os
 canToggleSettings = True
 opSystem = sys.platform
+devmode = False
 
-pysnakeVersion = (2,1,4)
-
+#Checking for developer mode
+if len(sys.argv) > 1:
+    if sys.argv[1] == "-devmode":
+        devmode = True
+    else:
+        print("Error 745: Unknown argument")
+        sys.exit()
+    
+#Version display function
+pysnakeVersion = (2,2,0)
 
 def returnVersion(precision):
     global pysnakeVersion
-    empty = ""
-    counter = 0
-    
-    for i in range(precision-1):
-        empty = empty+str(pysnakeVersion[i])
-        empty = empty+"."
-    empty = empty+str(pysnakeVersion[precision-1])
-    return empty
-
-    
+    if precision > len(pysnakeVersion):
+        print("Error 652: Version index out of range")
+        return "If you're seeing this, William is a dickwad"
+    else:
+        empty = ""
         
+        for i in range(precision-1):
+            empty = empty+str(pysnakeVersion[i])
+            empty = empty+"."
+        empty = empty+str(pysnakeVersion[precision-1])
+        return empty
 
-    
-    
+#Variable setup
+globalSnakeTiming = 0.1
+globalSnakeMove = 10
+#Defining locations
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
      (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
@@ -47,7 +58,7 @@ lineListY = [(-35, -50), (-25, -50), (-15, -50), (-5, -50), (5, -50), (15, -50),
 lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
             (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
             (110, 85), (110, 95), (110, 105)]
-
+#Initial theme setup
 dir_path = os.path.dirname(os.path.realpath(__file__))
 if sys.platform == "linux" or "darwin":
     f = open(dir_path+"/theme.txt", "r")
@@ -59,31 +70,25 @@ f.close()
 
 rng_seed = 0
 
+#Global turtle setup
 window = turtle.Screen()
-window.title(returnVersion(3))
-
-
-
-    
+string = "PySnake "
+if devmode:
+    string = "[Dev]Pysnake "
+window.title(string+returnVersion(3)) 
 turtle.tracer(0, 0)
 
-
+#Setup turtles
 setup = turtle.Turtle()
 setup.hideturtle()
 setup.up()
 setup.shape("square")
 setup.turtlesize(0.45)
 setup.speed(0)
-
-
-    
-
-
-
 line = turtle.Turtle()
 line.color("gray")
 
-
+#Function for drawing gridlines
 def drawLines():
     global line
     line.clear()
@@ -103,6 +108,7 @@ def drawLines():
 drawLines()
 line.hideturtle()
 
+#Draws walls
 def drawBoundary():
     global setup
     global wall_list
@@ -111,7 +117,7 @@ def drawBoundary():
         setup.setpos(wall_list[i])
         setup.stamp()
 
-
+#Changes theme; kind of obsolete
 def changeTheme():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     if sys.platform == "linux" or "darwin":
@@ -134,15 +140,15 @@ def changeTheme():
     elif theme == "classic":
         setTheme("light")
         f.write("light")
-
     f.close()
-    
+#Function to change theme while settings is open
 def settingsTheme():
     changeTheme()
     settingsBoi.clear()
     settingsBoi.setpos(-200, 100)
     settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align = "left")
 
+#Directly sets theme
 def setTheme(them):
     global theme, snake, cherry, setup, window, drawturt, settingsOpen
     if them == "light":
@@ -403,16 +409,19 @@ def check():
     global snake
     global receive
     global score
-    if snake.pos() in wall_list:
-        gameover()
+    global enableNoClip
+    if not enableNoClip:
+        if snake.pos() in wall_list:
+            gameover()
+            
+            reset()
+            score = 0
+        if snake.pos() in stampList:
+            gameover()
+            
+            reset()
+            score = 0
         
-        reset()
-        score = 0
-    if snake.pos() in stampList:
-        gameover()
-        
-        reset()
-        score = 0
     if snake.pos() in cherryList:
         receive = 1
 
@@ -428,7 +437,9 @@ drawturt = turtle.Turtle()
 drawturt.hideturtle()
 drawturt.up()
 
-    
+def instaCherry():
+    global receive
+    receive = 1
 def gameover():
     drawturt.setpos(0, 200)
     drawturt.write("Game Over", font=("Arial", 64, "normal"), align = "center")
@@ -517,8 +528,9 @@ def reset():
     cherry.clearstamps()
     cherryList = []
     if score > high_score:
-        high_score = score
-        newHighScore()
+        if not devmode:
+            high_score = score
+            newHighScore()
     
     time.sleep(0.5)
     
@@ -585,9 +597,9 @@ while noStart:
     if demo:
         movecount += 1
         
-        snake.forward(10)
+        snake.forward(globalSnakeMove)
         counter555 += 1
-        time.sleep(0.09)
+        time.sleep(globalSnakeTiming)
         snake.setpos(round(snake.xcor(),2),round(snake.ycor(),2))
         if movecount == 2:
             movecount = 0
@@ -631,7 +643,8 @@ window.onkeypress(snakeup, "w")
 window.onkeypress(snakedown, "s")
 window.onkeypress(snakeright, "d")
 window.onkeypress(snakeleft, "a")
-#window.onkeypress(changeTheme, "m")
+
+
 window.onkeypress(None, "h")
 window.onkeypress(None, "1")
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -641,15 +654,27 @@ file.close()
 score = 0
 snake.seth(270)
 drawHighScore()
+enableNoClip = False
+def noClip():
+    global enableNoClip
+    if  enableNoClip == False:
+        enableNoClip = True
+    elif enableNoClip:
+        enableNoClip = False
+
+if devmode:
+    window.onkeypress(changeTheme, "m")
+    window.onkeypress(noClip, "p")
+    window.onkeypress(instaCherry, "c")
+    
+
 window.listen()
-
-
 while True:
     scoreify(score)
     turtle.update()
-    snake.forward(10)
+    snake.forward(globalSnakeMove)
     counter555 += 1
-    time.sleep(0.1)
+    time.sleep(globalSnakeTiming)
     snake.setpos(round(snake.xcor(),0),round(snake.ycor(),0))
     check()
     if not cherryThisTurn():

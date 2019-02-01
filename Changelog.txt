@@ -1,8 +1,5 @@
 Changelog:
->Fixed bug where theme could be changed after closing settings
->Adjusted way version number is drawn
->Merged Mac and Linux executables
-
+>Added devmode; can be accessed by launching program with argument -devmode
 
 To do:
 >Add more settings items (Gridlines, game speed, etc.)
