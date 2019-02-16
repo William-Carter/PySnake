@@ -1,5 +1,5 @@
 Changelog:
->Added devmode; can be accessed by launching program with argument -devmode
+>Bug fixes (I actually did nothing but whatever)
 
 To do:
 >Add more settings items (Gridlines, game speed, etc.)

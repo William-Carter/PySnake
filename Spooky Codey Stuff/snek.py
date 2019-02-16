@@ -1,38 +1,63 @@
-#Copyright William Carter 2019
-import turtle, random, time, sys, os
+# Copyright William Carter 2019
+import turtle
+import random
+import time
+import sys
+import os
 canToggleSettings = True
 opSystem = sys.platform
 devmode = False
 
-#Checking for developer mode
+# Error handling cause god knows we need it
+
+
+def bigFatError(inp):
+    turtle.clearscreen()
+    errorReport = turtle.Turtle()
+    errorReport.hideturtle()
+    errorReport.up()
+
+    time.sleep(0.3)
+    errorReport.write("Uh oh, someone did a fucky wucky\n"+inp, font=("Arial", 25, "normal"), align="center")
+    time.sleep(3)
+    sys.exit()
+
+# Checking for developer mode
+
+
 if len(sys.argv) > 1:
     if sys.argv[1] == "-devmode":
         devmode = True
     else:
-        print("Error 745: Unknown argument")
+        bigFatError("Error 745: Unknown argument")
         sys.exit()
-    
-#Version display function
-pysnakeVersion = (2,2,0)
+
+# Version display function
+pysnakeVersion = (2, 2, 1)
+
 
 def returnVersion(precision):
     global pysnakeVersion
     if precision > len(pysnakeVersion):
-        print("Error 652: Version index out of range")
-        return "If you're seeing this, William is a dickwad"
+        return("If you're seeing this, William is a dickwad")
+        bigFatError("Error 652: Version index out of range")
+
     else:
         empty = ""
-        
         for i in range(precision-1):
             empty = empty+str(pysnakeVersion[i])
             empty = empty+"."
         empty = empty+str(pysnakeVersion[precision-1])
         return empty
 
-#Variable setup
+# Variable setup
+
 globalSnakeTiming = 0.1
 globalSnakeMove = 10
-#Defining locations
+
+# Defining locations
+
+
 wall_list = [
      (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
      (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
@@ -58,27 +83,27 @@ lineListY = [(-35, -50), (-25, -50), (-15, -50), (-5, -50), (5, -50), (15, -50),
 lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
             (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
             (110, 85), (110, 95), (110, 105)]
-#Initial theme setup
+# Initial theme setup
 dir_path = os.path.dirname(os.path.realpath(__file__))
 if sys.platform == "linux" or "darwin":
     f = open(dir_path+"/theme.txt", "r")
 elif sys.platform == "win32" or "cygwin":
     f = open(dir_path+"\theme.txt", "r")
 
-theme = f.read() 
+theme = f.read()
 f.close()
 
 rng_seed = 0
 
-#Global turtle setup
+# Global turtle setup
 window = turtle.Screen()
 string = "PySnake "
 if devmode:
     string = "[Dev]Pysnake "
-window.title(string+returnVersion(3)) 
+window.title(string+returnVersion(3))
 turtle.tracer(0, 0)
 
-#Setup turtles
+# Setup turtles
 setup = turtle.Turtle()
 setup.hideturtle()
 setup.up()
@@ -88,7 +113,9 @@ setup.speed(0)
 line = turtle.Turtle()
 line.color("gray")
 
-#Function for drawing gridlines
+# Function for drawing gridlines
+
+
 def drawLines():
     global line
     line.clear()
@@ -105,10 +132,14 @@ def drawLines():
         line.down()
         line.seth(180)
         line.forward(160)
+
+
 drawLines()
 line.hideturtle()
 
-#Draws walls
+# Draws walls
+
+
 def drawBoundary():
     global setup
     global wall_list
@@ -117,14 +148,16 @@ def drawBoundary():
         setup.setpos(wall_list[i])
         setup.stamp()
 
-#Changes theme; kind of obsolete
+# Changes theme; kind of obsolete
+
+
 def changeTheme():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     if sys.platform == "linux" or "darwin":
         f = open(dir_path+"/theme.txt", "w")
     elif sys.platform == "win32" or "cygwin":
         f = open(dir_path+"\theme.txt", "w")
-        
+
     if theme == "light":
         setTheme("dark")
         f.write("dark")
@@ -141,14 +174,18 @@ def changeTheme():
         setTheme("light")
         f.write("light")
     f.close()
-#Function to change theme while settings is open
+# Function to change theme while settings is open
+
+
 def settingsTheme():
     changeTheme()
     settingsBoi.clear()
     settingsBoi.setpos(-200, 100)
-    settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align = "left")
+    settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align="left")
 
-#Directly sets theme
+# Directly sets theme
+
+
 def setTheme(them):
     global theme, snake, cherry, setup, window, drawturt, settingsOpen
     if them == "light":
@@ -162,9 +199,6 @@ def setTheme(them):
     elif them == "classic":
         theme = "classic"
 
-    
-
-
     if theme == "light":
         setup.color("black")
         snake.color("dark green")
@@ -174,7 +208,7 @@ def setTheme(them):
         highscore.color("black")
         line.color("dark gray")
         settingsBoi.color("black")
-        
+
     elif theme == "dark":
         setup.color("white")
         snake.color("orange")
@@ -184,7 +218,7 @@ def setTheme(them):
         highscore.color("white")
         line.color("gray")
         settingsBoi.color("white")
-        
+
     elif theme == "gray":
         setup.color("light gray")
         snake.color("gray")
@@ -215,26 +249,21 @@ def setTheme(them):
         line.color("white")
         settingsBoi.color("black")
 
-
     scoreify(score)
     drawHighScore()
     if not settingsOpen:
         drawLines()
-        
+
         drawSnake()
         drawBoundary()
-        
+
     turtle.update()
 
     if settingsOpen:
         setup.setpos(0, 200)
-        setup.write("Settings", font=("Arial", 32, "normal"), align = "center")
+        setup.write("Settings", font=("Arial", 32, "normal"), align="center")
         setup.setpos(0, -250)
-        setup.write("Press H to return", font=("Arial", 32, "normal"), align = "center")
-
-    
-
-
+        setup.write("Press H to return", font=("Arial", 32, "normal"), align="center")
 
 
 drawBoundary()
@@ -255,30 +284,31 @@ def removeLastStamp():
     global turtle
     stampList.pop(0)
     drawSnake()
-    
+
+
 receive = 0
+
 
 def placeCherry():
     global receive
     receive = 1
+
 
 cherry = turtle.Turtle()
 cherry.shape("square")
 cherry.turtlesize(0.45)
 cherry.up()
 
+
 def spawnCherry():
     global cherry
     global stampList
     global rng_seed
     meme = True
-    allList = [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     listNeg = [-40, -30, -20, -10, 0, 10, 20, 30]
     listPos = [30, 40, 50, 60, 70, 80, 90, 100]
     while meme:
         global rng_seed
-
-
         if rng_seed == 0:
             spot1 = int(random.choice(listNeg))
             spot2 = int(random.choice(listPos))
@@ -294,9 +324,7 @@ def spawnCherry():
         elif rng_seed == 3:
             spot1 = int(random.choice(listPos))
             spot2 = int(random.choice(listNeg))
-            
-            
-        
+
         cherry.setpos(spot1, spot2)
         if not cherry.pos() in stampList:
             cherryList.append(cherry.pos())
@@ -306,15 +334,13 @@ def spawnCherry():
 
 def stampify(var):
     var.stamp()
-    stampList.append((round(var.xcor(),2),round(var.ycor(),2)))
-
+    stampList.append((round(var.xcor(), 2), round(var.ycor(), 2)))
 
 
 stampList = []
 
 
-       
-#defining the snake
+# defining the snake
 snake = turtle.Turtle()
 snake.seth(270)
 snake.up()
@@ -334,12 +360,10 @@ settingsBoi.hideturtle()
 settingsBoi.up()
 
 
-
 def openSettings():
     global settingsOpen, canToggleSettings
     if canToggleSettings:
         canToggleSettings = False
-        demoCounter = 0
         stopDemo()
         line.clear()
         window.onkeypress(None, "space")
@@ -347,19 +371,17 @@ def openSettings():
         settingsOpen = True
         setup.clear()
         setup.setpos(0, 200)
-        setup.write("Settings", font=("Arial", 32, "normal"), align = "center")
+        setup.write("Settings", font=("Arial", 32, "normal"), align="center")
         setup.setpos(0, -250)
-        setup.write("Press H to return", font=("Arial", 32, "normal"), align = "center")
+        setup.write("Press H to return", font=("Arial", 32, "normal"), align="center")
         snake.clearstamps()
         cherry.clearstamps()
         snake.hideturtle()
         cherry.hideturtle()
         settingsBoi.setpos(-200, 100)
         window.onkeypress(settingsTheme, "1")
-        settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align = "left")
-        demoCounter = 0
+        settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align="left")
         turtle.update()
-    
 
 
 rng_seed = 0
@@ -371,21 +393,24 @@ def snakeleft():
     if not snake.heading() == 0 and count != counter555:
         snake.seth(180)
         count = counter555
-        
+
+
 def snakeright():
     global snake, counter555, count, rng_seed
     rng_seed = 1
     if not snake.heading() == 180 and count != counter555:
-       snake.seth(0)
-       count = counter555
-       
+        snake.seth(0)
+        count = counter555
+
+
 def snakeup():
     global snake, counter555, count, rng_seed
     rng_seed = 2
     if not snake.heading() == 270 and count != counter555:
-       snake.seth(90)
-       count = counter555
-       
+        snake.seth(90)
+        count = counter555
+
+
 def snakedown():
     global snake, counter555, count, rng_seed
     rng_seed = 3
@@ -401,9 +426,12 @@ def cherryThisTurn():
         return True
     if receive == 0:
         return False
-    
+
+
 high_score = 0
 score = 0
+
+
 def check():
     global wall_list
     global snake
@@ -413,19 +441,21 @@ def check():
     if not enableNoClip:
         if snake.pos() in wall_list:
             gameover()
-            
+
             reset()
             score = 0
         if snake.pos() in stampList:
             gameover()
-            
+
             reset()
             score = 0
-        
+
     if snake.pos() in cherryList:
         receive = 1
 
+
 demo = True
+
 
 def stopDemo():
     global demo
@@ -433,27 +463,31 @@ def stopDemo():
     window.onkeypress(None, "h")
     window.onkeypress(None, "space")
 
+
 drawturt = turtle.Turtle()
 drawturt.hideturtle()
 drawturt.up()
 
+
 def instaCherry():
     global receive
     receive = 1
+
+
 def gameover():
     drawturt.setpos(0, 200)
-    drawturt.write("Game Over", font=("Arial", 64, "normal"), align = "center")
+    drawturt.write("Game Over", font=("Arial", 64, "normal"), align="center")
     drawturt.setpos(0, 150)
-    drawturt.write("You Scored "+str(score)+" points", font=("Arial", 32, "normal"), align = "center")
+    drawturt.write("You Scored "+str(score)+" points", font=("Arial", 32, "normal"), align="center")
     time.sleep(1)
     drawturt.clear()
+
 
 def startGame():
     global demo, noStart
     demo = False
     noStart = False
-    
-    
+
 
 window.onkeypress(startGame, "space")
 window.onkeypress(openSettings, "h")
@@ -475,21 +509,20 @@ def startDemo():
         window.listen()
         setup.clear()
         setup.setpos(0, 200)
-        
+
         settingsBoi.clear()
-        
-        setup.write("PySnake "+returnVersion(2), font=("Arial", 64, "normal"), align = "center")
+
+        setup.write("PySnake "+returnVersion(2), font=("Arial", 64, "normal"), align="center")
         setup.setpos(0, -250)
-        setup.write("Press Space to Start", font=("Arial", 32, "normal"), align = "center")
+        setup.write("Press Space to Start", font=("Arial", 32, "normal"), align="center")
         setup.setpos(0, -300)
-        setup.write("Press H for Settings", font=("Arial", 24, "normal"), align = "center")
+        setup.write("Press H for Settings", font=("Arial", 24, "normal"), align="center")
 
         drawBoundary()
         setTheme(theme)
         canToggleSettings = False
         demoCounter = 0
         turtle.update()
-        
 
 
 def customCherry(x, y):
@@ -497,17 +530,16 @@ def customCherry(x, y):
     cherry.setpos(x, y)
     cherry.stamp()
 
+
 def demoCheck():
     global wall_list
     global snake
     global receive
     if snake.pos() in wall_list:
         resetDemo()
-        
-     
     if snake.pos() in stampList:
         resetDemo()
-        
+
     if snake.pos() in cherryList:
         receive = 1
 
@@ -528,15 +560,19 @@ def reset():
     cherry.clearstamps()
     cherryList = []
     if score > high_score:
+        if score > 400:
+            print("cheater")
+
         if not devmode:
             high_score = score
             newHighScore()
-    
+
     time.sleep(0.5)
-    
+
     drawHighScore()
 
     spawnCherry()
+
 
 def resetDemo():
     global high_score, cherryList
@@ -554,12 +590,13 @@ def resetDemo():
     snake.seth(270)
     cherry.clearstamps()
     cherryList = []
-
     spawnCherry()
+
 
 highscore = turtle.Turtle()
 highscore.hideturtle()
 highscore.up()
+
 
 def newHighScore():
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -567,19 +604,21 @@ def newHighScore():
     f.write("#If you're going to cheat, at least bloody modify the code to do it. Don't be lazy.\n")
     f.write(str(high_score))
     f.close()
+
+
 def drawHighScore():
     global high_score
     highscore.setpos(-290, 200)
     highscore.clear()
-    highscore.write(high_score, font=("Arial", 40, "normal"), align = "center")
-    
+    highscore.write(high_score, font=("Arial", 40, "normal"), align="center")
+
+
 def scoreify(x):
     global drawturt
     drawturt.clear()
     drawturt.setpos(290, 200)
-    drawturt.write(x, font=("Arial", 40, "normal"), align = "center")
-    
-    
+    drawturt.write(x, font=("Arial", 40, "normal"), align="center")
+
 
 cherryList = []
 spawnCherry()
@@ -592,15 +631,15 @@ demoCounter = 0
 canToggleSettings = False
 while noStart:
     canToggleSettings = True
-   
+
     turtle.update()
     if demo:
         movecount += 1
-        
+
         snake.forward(globalSnakeMove)
         counter555 += 1
         time.sleep(globalSnakeTiming)
-        snake.setpos(round(snake.xcor(),2),round(snake.ycor(),2))
+        snake.setpos(round(snake.xcor(), 2), round(snake.ycor(), 2))
         if movecount == 2:
             movecount = 0
             thiccchic = ["up", "down", "left", "right"]
@@ -624,14 +663,13 @@ while noStart:
             cherryList = []
             spawnCherry()
 
-
     if demoCounter < 5:
         demoCounter += 1
 
     elif demoCounter == 5:
         canToggleSettings = True
-        
-        
+
+
 resetDemo()
 setup.clear()
 drawBoundary()
@@ -655,18 +693,21 @@ score = 0
 snake.seth(270)
 drawHighScore()
 enableNoClip = False
+
+
 def noClip():
     global enableNoClip
-    if  enableNoClip == False:
+    if not enableNoClip:
         enableNoClip = True
     elif enableNoClip:
         enableNoClip = False
+
 
 if devmode:
     window.onkeypress(changeTheme, "m")
     window.onkeypress(noClip, "p")
     window.onkeypress(instaCherry, "c")
-    
+
 
 window.listen()
 while True:
@@ -675,7 +716,7 @@ while True:
     snake.forward(globalSnakeMove)
     counter555 += 1
     time.sleep(globalSnakeTiming)
-    snake.setpos(round(snake.xcor(),0),round(snake.ycor(),0))
+    snake.setpos(round(snake.xcor(), 0), round(snake.ycor(),  0))
     check()
     if not cherryThisTurn():
         removeLastStamp()
