@@ -4,6 +4,7 @@ import random
 import time
 import sys
 import os
+import themeList
 canToggleSettings = True
 opSystem = sys.platform
 devmode = False
@@ -148,7 +149,7 @@ def drawBoundary():
         setup.setpos(wall_list[i])
         setup.stamp()
 
-# Changes theme; kind of obsolete
+# Changes theme
 
 
 def changeTheme():
@@ -156,7 +157,7 @@ def changeTheme():
     if sys.platform == "linux" or "darwin":
         f = open(dir_path+"/theme.txt", "w")
     elif sys.platform == "win32" or "cygwin":
-        f = open(dir_path+"\theme.txt", "w")
+        f = open(dir_path+"\\theme.txt", "w")
 
     if theme == "light":
         setTheme("dark")
@@ -186,68 +187,19 @@ def settingsTheme():
 # Directly sets theme
 
 
-def setTheme(them):
+def setTheme(thame):
     global theme, snake, cherry, setup, window, drawturt, settingsOpen
-    if them == "light":
-        theme = "light"
-    elif them == "dark":
-        theme = "dark"
-    elif them == "gray":
-        theme = "gray"
-    elif them == "idle":
-        theme = "idle"
-    elif them == "classic":
-        theme = "classic"
-
-    if theme == "light":
-        setup.color("black")
-        snake.color("dark green")
-        cherry.color("red")
-        window.bgcolor("white")
-        drawturt.color("black")
-        highscore.color("black")
-        line.color("dark gray")
-        settingsBoi.color("black")
-
-    elif theme == "dark":
-        setup.color("white")
-        snake.color("orange")
-        cherry.color("light blue")
-        window.bgcolor("black")
-        drawturt.color("white")
-        highscore.color("white")
-        line.color("gray")
-        settingsBoi.color("white")
-
-    elif theme == "gray":
-        setup.color("light gray")
-        snake.color("gray")
-        cherry.color("white")
-        window.bgcolor("dark gray")
-        drawturt.color("light gray")
-        highscore.color("light gray")
-        line.color("gray")
-        settingsBoi.color("light gray")
-
-    elif theme == "idle":
-        setup.color("white")
-        snake.color("#EA9337")
-        cherry.color("#6BEF4A")
-        window.bgcolor("#124779")
-        drawturt.color("white")
-        highscore.color("white")
-        line.color("gray")
-        settingsBoi.color("white")
-
-    elif theme == "classic":
-        setup.color("black")
-        snake.color("black")
-        cherry.color("red")
-        window.bgcolor("white")
-        drawturt.color("black")
-        highscore.color("black")
-        line.color("white")
-        settingsBoi.color("black")
+    theme = thame
+    print("thame = ", thame)
+    print(themeList.themes[thame]["setup"])
+    setup.color(themeList.themes[thame]["setup"])
+    snake.color(themeList.themes[thame]["snake"])
+    cherry.color(themeList.themes[thame]["cherry"])
+    window.bgcolor(themeList.themes[thame]["background"])
+    drawturt.color(themeList.themes[thame]["text"])
+    highscore.color(themeList.themes[thame]["highscore"])
+    line.color(themeList.themes[thame]["line"])
+    settingsBoi.color(themeList.themes[thame]["settings"])
 
     scoreify(score)
     drawHighScore()
