@@ -20,8 +20,7 @@ def bigFatError(inp):
 
     time.sleep(0.3)
     errorReport.write("Uh oh, someone did a fucky wucky\n"+inp, font=("Arial", 25, "normal"), align="center")
-    time.sleep(3)
-    sys.exit()
+    quit()
 
 # Checking for developer mode
 
@@ -34,7 +33,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
 # Version display function
-pysnakeVersion = (2, 2, 1)
+pysnakeVersion = (2, 3, 0)
 
 
 def returnVersion(precision):
@@ -84,24 +83,26 @@ lineListY = [(-35, -50), (-25, -50), (-15, -50), (-5, -50), (5, -50), (15, -50),
 lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
             (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
             (110, 85), (110, 95), (110, 105)]
+
 # Initial theme setup
 dir_path = os.path.dirname(os.path.realpath(__file__))
 if sys.platform == "linux" or "darwin":
-    f = open(dir_path+"/theme.txt", "r")
+    f = open(dir_path+"/theme.txt", "r+")
 elif sys.platform == "win32" or "cygwin":
-    f = open(dir_path+"\theme.txt", "r")
+    f = open(dir_path+"\\theme.txt", "r")
 
 theme = f.read()
 f.close()
-
+print(theme)
 rng_seed = 0
 
 # Global turtle setup
 window = turtle.Screen()
-string = "PySnake "
+
+titleString = "PySnake"
 if devmode:
-    string = "[Dev]Pysnake "
-window.title(string+returnVersion(3))
+    titleString = "[Dev]Pysnake"
+window.title((titleString,returnVersion(3)))
 turtle.tracer(0, 0)
 
 # Setup turtles
@@ -153,28 +154,22 @@ def drawBoundary():
 
 
 def changeTheme():
+    global theme
     dir_path = os.path.dirname(os.path.realpath(__file__))
     if sys.platform == "linux" or "darwin":
         f = open(dir_path+"/theme.txt", "w")
     elif sys.platform == "win32" or "cygwin":
         f = open(dir_path+"\\theme.txt", "w")
 
-    if theme == "light":
-        setTheme("dark")
-        f.write("dark")
-    elif theme == "dark":
-        setTheme("gray")
-        f.write("gray")
-    elif theme == "gray":
-        setTheme("idle")
-        f.write("idle")
-    elif theme == "idle":
-        setTheme("classic")
-        f.write("classic")
-    elif theme == "classic":
-        setTheme("light")
-        f.write("light")
+    currentVal = themeList.themeIndex.index(theme)
+    if not currentVal + 1 == len(themeList.themeIndex):
+        themeIn = themeList.themeIndex[currentVal+1]
+    else:
+        themeIn = themeList.themeIndex[0]
+        print(themeList.themeIndex[0])
+    f.write(themeIn)
     f.close()
+    setTheme(themeIn)
 # Function to change theme while settings is open
 
 
@@ -190,8 +185,6 @@ def settingsTheme():
 def setTheme(thame):
     global theme, snake, cherry, setup, window, drawturt, settingsOpen
     theme = thame
-    print("thame = ", thame)
-    print(themeList.themes[thame]["setup"])
     setup.color(themeList.themes[thame]["setup"])
     snake.color(themeList.themes[thame]["snake"])
     cherry.color(themeList.themes[thame]["cherry"])
