@@ -22,6 +22,10 @@ themes = {
 "valentines" : {
 "setup" : "#9400F4", "snake" : "white", "cherry" : "#9400F4", "background" : "#DD9DFF",
 "text" : "#9400FF", "highscore" : "#9400F4", "line" : "white", "settings" : "#9400F4"
+},
+"sunset" : {
+"setup" : "#FA6D6F", "snake" : "#FA6D6F", "cherry" : "#FA006F", "background" : "#FAB96F",
+"text" : "#FA6D6F", "highscore" : "#FA6D6F", "line" : "white", "settings" : "#FA6D6F"
 }
 }
 themeIndex = []

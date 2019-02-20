@@ -1,7 +1,9 @@
 Changelog:
->Bug fixes (I actually did nothing but whatever)
+>Redid the whole theme system, now you can easily add your own themes in the themeList file
+>Added Valentines theme
+>Added sunset theme
+>Added cool easter egg (see #11)
 
 To do:
 >Add more settings items (Gridlines, game speed, etc.)
->Get some more themes going
->Fix glitchy menu screen bug (see #11)
+
