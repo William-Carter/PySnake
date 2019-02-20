@@ -16,7 +16,7 @@ themes = {
 "text" : "black", "highscore" : "black", "line" : "white", "settings" : "black"
 },
 "idle" : {
-"setup" : "black", "snake" : "#EA9337", "cherry" : "#6BEF4A", "background" : "#124779",
+"setup" : "white", "snake" : "#EA9337", "cherry" : "#6BEF4A", "background" : "#124779",
 "text" : "white", "highscore" : "white", "line" : "white", "settings" : "white"
 },
 "valentines" : {
