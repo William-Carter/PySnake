@@ -5,7 +5,6 @@ import time
 import sys
 import os
 import themeList
-canToggleSettings = True
 opSystem = sys.platform
 devmode = False
 
@@ -33,7 +32,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
 # Version display function
-pysnakeVersion = (2, 3, 0)
+pysnakeVersion = (2, 3, 1)
 
 
 def returnVersion(precision):
@@ -52,8 +51,9 @@ def returnVersion(precision):
 
 # Variable setup
 
+
 globalSnakeTiming = 0.1
-globalSnakeMove = 10
+blockWidth = 10
 
 # Defining locations
 
@@ -76,14 +76,6 @@ wall_list = [
      (70, 110), (80, 110), (90, 110), (100, 110)
      ]
 
-lineListY = [(-35, -50), (-25, -50), (-15, -50), (-5, -50), (5, -50), (15, -50),
-            (25, -50), (35, -50), (45, -50), (55, -50), (65, -50), (75, -50),
-            (85, -50), (95, -50)]
-
-lineListX = [(110, -35), (110, -25), (110, -15), (110, -5), (110, 5), (110, 15),
-            (110, 25), (110, 35), (110, 45), (110, 55), (110, 65), (110, 75),
-            (110, 85), (110, 95), (110, 105)]
-
 # Initial theme setup
 dir_path = os.path.dirname(os.path.realpath(__file__))
 if sys.platform == "linux" or "darwin":
@@ -93,7 +85,6 @@ elif sys.platform == "win32" or "cygwin":
 
 theme = f.read()
 f.close()
-print(theme)
 rng_seed = 0
 
 # Global turtle setup
@@ -102,7 +93,7 @@ window = turtle.Screen()
 titleString = "PySnake"
 if devmode:
     titleString = "[Dev]Pysnake"
-window.title((titleString,returnVersion(3)))
+window.title((titleString, returnVersion(3)))
 turtle.tracer(0, 0)
 
 # Setup turtles
@@ -114,30 +105,10 @@ setup.turtlesize(0.45)
 setup.speed(0)
 line = turtle.Turtle()
 line.color("gray")
-
-# Function for drawing gridlines
-
-
-def drawLines():
-    global line
-    line.clear()
-    for m in range(len(lineListY)):
-        line.up()
-        line.setpos(lineListY[m])
-        line.down()
-        line.seth(90)
-        line.forward(160)
-
-    for n in range(len(lineListX)):
-        line.up()
-        line.setpos(lineListX[n])
-        line.down()
-        line.seth(180)
-        line.forward(160)
-
-
-drawLines()
+line.up()
 line.hideturtle()
+linesOn = True
+
 
 # Draws walls
 
@@ -149,6 +120,54 @@ def drawBoundary():
     for i in range(len(wall_list)):
         setup.setpos(wall_list[i])
         setup.stamp()
+
+
+def drawLines(lis):
+    line.clear()
+    global linesOn
+    xList = []
+    yList = []
+    for object in lis:
+        tup = object
+        x = tup[0]
+        y = tup[1]
+        xList.append(x)
+        yList.append(y)
+    maxX = max(xList)
+    maxY = max(yList)
+    minX = min(xList)
+    minY = min(yList)
+    topLeft = (minX, maxY)
+    bottomRight = (maxX, minY)
+    line.setpos(topLeft)
+    line.seth(0)
+    line.setx(line.xcor()+5)
+    if linesOn:
+        for i in range((int(bottomRight[0])-int(topLeft[0]))//10):
+            line.down()
+            backup = line.pos()
+            line.setpos(line.xcor(), bottomRight[1])
+            line.up()
+            line.setpos(backup)
+            line.setpos(line.xcor()+blockWidth, line.ycor())
+
+        line.setpos(topLeft)
+        line.seth(0)
+        line.sety(line.ycor()-5)
+        line.down()
+        for j in range((int(topLeft[1])-int(bottomRight[1]))//10):
+            line.down()
+            backup = line.pos()
+            line.setpos(bottomRight[0], line.ycor())
+            line.up()
+            line.setpos(backup)
+            line.setpos(line.xcor(), line.ycor()-blockWidth)
+
+        drawBoundary()
+
+
+drawLines(wall_list)
+
 
 # Changes theme
 
@@ -166,18 +185,24 @@ def changeTheme():
         themeIn = themeList.themeIndex[currentVal+1]
     else:
         themeIn = themeList.themeIndex[0]
-        print(themeList.themeIndex[0])
     f.write(themeIn)
     f.close()
     setTheme(themeIn)
 # Function to change theme while settings is open
 
 
-def settingsTheme():
-    changeTheme()
+def drawSettings():
     settingsBoi.clear()
     settingsBoi.setpos(-200, 100)
     settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align="left")
+    settingsBoi.setpos(-200, 50)
+    settingsBoi.write("2. Lines: "+str(linesOn), font=("Arial", 25, "normal"), align="left")
+
+
+def settingsTheme():
+    changeTheme()
+    drawSettings()
+
 
 # Directly sets theme
 
@@ -197,7 +222,7 @@ def setTheme(thame):
     scoreify(score)
     drawHighScore()
     if not settingsOpen:
-        drawLines()
+        drawLines(wall_list)
 
         drawSnake()
         drawBoundary()
@@ -303,6 +328,7 @@ settingsBoi = turtle.Turtle()
 settingsBoi.speed(0)
 settingsBoi.hideturtle()
 settingsBoi.up()
+canToggleSettings = True
 
 
 def openSettings():
@@ -323,13 +349,26 @@ def openSettings():
         cherry.clearstamps()
         snake.hideturtle()
         cherry.hideturtle()
-        settingsBoi.setpos(-200, 100)
+
         window.onkeypress(settingsTheme, "1")
-        settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align="left")
+        window.onkeypress(toggleLines, "2")
+        drawSettings()
         turtle.update()
 
 
 rng_seed = 0
+
+
+def toggleLines():
+    global linesOn
+    if linesOn:
+        linesOn = False
+    elif not linesOn:
+        linesOn = True
+    if settingsOpen:
+        drawSettings()
+    else:
+        drawLines(wall_list)
 
 
 def snakeleft():
@@ -377,7 +416,7 @@ high_score = 0
 score = 0
 
 
-def check():
+def checkCollision():
     global wall_list
     global snake
     global receive
@@ -476,7 +515,7 @@ def customCherry(x, y):
     cherry.stamp()
 
 
-def demoCheck():
+def democheckCollision():
     global wall_list
     global snake
     global receive
@@ -581,7 +620,7 @@ while noStart:
     if demo:
         movecount += 1
 
-        snake.forward(globalSnakeMove)
+        snake.forward(blockWidth)
         counter555 += 1
         time.sleep(globalSnakeTiming)
         snake.setpos(round(snake.xcor(), 2), round(snake.ycor(), 2))
@@ -598,7 +637,7 @@ while noStart:
             if rand == "right":
                 snakeright()
 
-        demoCheck()
+        democheckCollision()
         if not cherryThisTurn():
             removeLastStamp()
             stampify(snake)
@@ -652,17 +691,19 @@ if devmode:
     window.onkeypress(changeTheme, "m")
     window.onkeypress(noClip, "p")
     window.onkeypress(instaCherry, "c")
+    window.onkeypress(toggleLines, "z")
 
 
 window.listen()
+snake.clear()
 while True:
     scoreify(score)
     turtle.update()
-    snake.forward(globalSnakeMove)
+    snake.forward(blockWidth)
     counter555 += 1
     time.sleep(globalSnakeTiming)
     snake.setpos(round(snake.xcor(), 0), round(snake.ycor(),  0))
-    check()
+    checkCollision()
     if not cherryThisTurn():
         removeLastStamp()
         stampify(snake)
