@@ -26,6 +26,10 @@ themes = {
 "sunset" : {
 "setup" : "#FA6D6F", "snake" : "#FA6D6F", "cherry" : "#FA006F", "background" : "#FAB96F",
 "text" : "#FA6D6F", "highscore" : "#FA6D6F", "line" : "white", "settings" : "#FA6D6F"
+},
+"vaporwave" : {
+"setup" : "#94D0FF", "snake" : "#FF6AD5", "cherry" : "#94D0FF", "background" : "#C774E8",
+"text" : "white", "highscore" : "white", "line" : "white", "settings" : "#94D0FF"
 }
 }
 themeIndex = []
