@@ -1,6 +1,7 @@
 Changelog:
 >Added the ability to toggle gridlines
 >Added "vaporwave" theme (kind of)
+>Updated the gridline system
 
 To do:
 >Add more settings items (Game speed, etc.)
