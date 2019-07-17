@@ -85,6 +85,14 @@ elif sys.platform == "win32" or "cygwin":
 
 theme = f.read()
 f.close()
+
+if sys.platform == "linux" or "darwin":
+    f = open(dir_path+"/line.txt", "r+")
+elif sys.platform == "win32" or "cygwin":
+    f = open(dir_path+"\\line.txt", "r")
+
+linesOn = f.read()
+f.close()
 rng_seed = 0
 
 # Global turtle setup
@@ -107,7 +115,7 @@ line = turtle.Turtle()
 line.color("gray")
 line.up()
 line.hideturtle()
-linesOn = True
+
 
 
 # Draws walls
@@ -370,6 +378,13 @@ def toggleLines():
     else:
         drawLines(wall_list)
 
+    if sys.platform == "linux" or "darwin":
+        f = open(dir_path+"/line.txt", "w")
+    elif sys.platform == "win32" or "cygwin":
+        f = open(dir_path+"\\line.txt", "w")
+    f.write(str(linesOn))
+    f.close()
+
 
 def snakeleft():
     global snake, counter555, count, rng_seed
@@ -490,6 +505,7 @@ def startDemo():
         window.onkeypress(startGame, "space")
         window.onkeypress(openSettings, "h")
         window.onkeypress(None, "1")
+        window.onkeypress(None, "2")
         window.listen()
         setup.clear()
         setup.setpos(0, 200)

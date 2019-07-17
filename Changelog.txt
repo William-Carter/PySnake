@@ -1,9 +1,7 @@
 Changelog:
->Redid the whole theme system, now you can easily add your own themes in the themeList file
->Added Valentines theme
->Added sunset theme
->Added cool easter egg (see #11)
+>Added the ability to toggle gridlines
+>Added "vaporwave" theme (kind of)
 
 To do:
->Add more settings items (Gridlines, game speed, etc.)
-
+>Add more settings items (Game speed, etc.)
+>Maybe add more themes
