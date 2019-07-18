@@ -1,7 +1,10 @@
 Changelog:
->Added the ability to toggle gridlines
->Added "vaporwave" theme (kind of)
->Updated the gridline system
+>Adjusted snek's movement. He's now faster.
+>Cherries will no longer spawn directly next to a wall
+>Redid the menu screen demo. It now uses a highly advanced supercomputer AI.
+>Fixed menu screen issue (see #11)
+>Changed a couple of internal things
+
 
 To do:
 >Add more settings items (Game speed, etc.)

@@ -7,7 +7,6 @@ import os
 import themeList
 opSystem = sys.platform
 devmode = False
-
 # Error handling cause god knows we need it
 
 
@@ -23,7 +22,6 @@ def bigFatError(inp):
 
 # Checking for developer mode
 
-
 if len(sys.argv) > 1:
     if sys.argv[1] == "-devmode":
         devmode = True
@@ -32,7 +30,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
 # Version display function
-pysnakeVersion = (2, 3, 1)
+pysnakeVersion = (2, 3, 2)
 
 
 def returnVersion(precision):
@@ -52,7 +50,7 @@ def returnVersion(precision):
 # Variable setup
 
 
-globalSnakeTiming = 0.1
+globalSnakeTiming = 0.06
 blockWidth = 10
 
 # Defining locations
@@ -283,8 +281,8 @@ def spawnCherry():
     global stampList
     global rng_seed
     meme = True
-    listNeg = [-40, -30, -20, -10, 0, 10, 20, 30]
-    listPos = [30, 40, 50, 60, 70, 80, 90, 100]
+    listNeg = [-30, -20, -10, 0, 10, 20]
+    listPos = [40, 50, 60, 70, 80, 90]
     while meme:
         global rng_seed
         if rng_seed == 0:
@@ -387,35 +385,35 @@ def toggleLines():
 
 
 def snakeleft():
-    global snake, counter555, count, rng_seed
+    global snake, globalTickCounter, count, rng_seed
     rng_seed = 0
-    if not snake.heading() == 0 and count != counter555:
+    if not snake.heading() == 0 and count != globalTickCounter:
         snake.seth(180)
-        count = counter555
+        count = globalTickCounter
 
 
 def snakeright():
-    global snake, counter555, count, rng_seed
+    global snake, globalTickCounter, count, rng_seed
     rng_seed = 1
-    if not snake.heading() == 180 and count != counter555:
+    if not snake.heading() == 180 and count != globalTickCounter:
         snake.seth(0)
-        count = counter555
+        count = globalTickCounter
 
 
 def snakeup():
-    global snake, counter555, count, rng_seed
+    global snake, globalTickCounter, count, rng_seed
     rng_seed = 2
-    if not snake.heading() == 270 and count != counter555:
+    if not snake.heading() == 270 and count != globalTickCounter:
         snake.seth(90)
-        count = counter555
+        count = globalTickCounter
 
 
 def snakedown():
-    global snake, counter555, count, rng_seed
+    global snake, globalTickCounter, count, rng_seed
     rng_seed = 3
-    if not snake.heading() == 90 and count != counter555:
+    if not snake.heading() == 90 and count != globalTickCounter:
         snake.seth(270)
-        count = counter555
+        count = globalTickCounter
 
 
 def cherryThisTurn():
@@ -622,36 +620,41 @@ def scoreify(x):
 
 cherryList = []
 spawnCherry()
-counter555 = 0
+globalTickCounter = 0
 movecount = 0
 setTheme(theme)
 startDemo()
 noStart = True
 demoCounter = 0
 canToggleSettings = False
+def aiChoice():
+
+    if round(snake.xcor(), 0) < cherryList[0][0]:
+        snakeright()
+
+    if round(snake.xcor(), 0) > cherryList[0][0]:
+        snakeleft()
+
+    if round(snake.xcor(), 0) == cherryList[0][0]:
+        if round(snake.ycor(), 0) < cherryList[0][1]:
+            snakeup()
+
+        elif round(snake.ycor(), 0) > cherryList[0][1]:
+            snakedown()
+
+
 while noStart:
     canToggleSettings = True
 
     turtle.update()
     if demo:
-        movecount += 1
 
         snake.forward(blockWidth)
-        counter555 += 1
-        time.sleep(globalSnakeTiming)
+        globalTickCounter += 1
+        time.sleep(0.03)
         snake.setpos(round(snake.xcor(), 2), round(snake.ycor(), 2))
-        if movecount == 2:
-            movecount = 0
-            thiccchic = ["up", "down", "left", "right"]
-            rand = random.choice(thiccchic)
-            if rand == "up":
-                snakeup()
-            if rand == "down":
-                snakedown()
-            if rand == "left":
-                snakeleft()
-            if rand == "right":
-                snakeright()
+        aiChoice()
+
 
         democheckCollision()
         if not cherryThisTurn():
@@ -701,8 +704,6 @@ def noClip():
         enableNoClip = True
     elif enableNoClip:
         enableNoClip = False
-
-
 if devmode:
     window.onkeypress(changeTheme, "m")
     window.onkeypress(noClip, "p")
@@ -713,10 +714,14 @@ if devmode:
 window.listen()
 snake.clear()
 while True:
+    if settingsOpen:
+        print("Wow, you did just do that didn't you")
+        sys.exit()
+
     scoreify(score)
     turtle.update()
     snake.forward(blockWidth)
-    counter555 += 1
+    globalTickCounter += 1
     time.sleep(globalSnakeTiming)
     snake.setpos(round(snake.xcor(), 0), round(snake.ycor(),  0))
     checkCollision()
