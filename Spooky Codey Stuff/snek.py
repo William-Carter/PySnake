@@ -30,7 +30,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
 # Version display function
-pysnakeVersion = (2, 3, 2)
+pysnakeVersion = (2, 3, 3)
 
 
 def returnVersion(precision):
@@ -148,7 +148,7 @@ def drawLines(lis):
     line.setpos(topLeft)
     line.seth(0)
     line.setx(line.xcor()+5)
-    if linesOn:
+    if linesOn == "True":
         for i in range((int(bottomRight[0])-int(topLeft[0]))//10):
             line.down()
             backup = line.pos()
@@ -364,13 +364,12 @@ def openSettings():
 
 rng_seed = 0
 
-
 def toggleLines():
     global linesOn
-    if linesOn:
-        linesOn = False
-    elif not linesOn:
-        linesOn = True
+    if linesOn == "True":
+        linesOn = "False"
+    elif not linesOn == "True":
+        linesOn = "True"
     if settingsOpen:
         drawSettings()
     else:
