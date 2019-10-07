@@ -15,10 +15,10 @@ def bigFatError(inp):
     errorReport = turtle.Turtle()
     errorReport.hideturtle()
     errorReport.up()
-
+    #If I don't wait here everything breaks. Ignore it.
     time.sleep(0.3)
     errorReport.write("Uh oh, someone did a fucky wucky\n"+inp, font=("Arial", 25, "normal"), align="center")
-    quit()
+    turtle.update()
 
 # Checking for developer mode
 
@@ -30,7 +30,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
 # Version display function
-pysnakeVersion = (2, 3, 3)
+pysnakeVersion = (2, 3, 4)
 
 
 def returnVersion(precision):
@@ -49,8 +49,6 @@ def returnVersion(precision):
 
 # Variable setup
 
-
-globalSnakeTiming = 0.06
 blockWidth = 10
 
 # Defining locations
@@ -91,6 +89,23 @@ elif sys.platform == "win32" or "cygwin":
 
 linesOn = f.read()
 f.close()
+
+if sys.platform == "linux" or "darwin":
+    f = open(dir_path+"/speed.txt", "r+")
+elif sys.platform == "win32" or "cygwin":
+    f = open(dir_path+"\\speed.txt", "r")
+
+gameSpeed = int(f.read())
+f.close()
+if gameSpeed == 1:
+    globalSnakeTiming = 0.1
+elif gameSpeed == 2:
+    globalSnakeTiming = 0.06
+elif gameSpeed == 3:
+     globalSnakeTiming = 0.04
+elif gameSpeed == 4:
+    globalSnakeTiming = 0.019
+
 rng_seed = 0
 
 # Global turtle setup
@@ -118,7 +133,6 @@ line.hideturtle()
 
 # Draws walls
 
-
 def drawBoundary():
     global setup
     global wall_list
@@ -127,6 +141,8 @@ def drawBoundary():
         setup.setpos(wall_list[i])
         setup.stamp()
 
+
+# Gay ass function to draw lines using the same input as drawboundary
 
 def drawLines(lis):
     line.clear()
@@ -147,9 +163,9 @@ def drawLines(lis):
     bottomRight = (maxX, minY)
     line.setpos(topLeft)
     line.seth(0)
-    line.setx(line.xcor()+5)
+    line.setx(line.xcor()+(blockWidth/2))
     if linesOn == "True":
-        for i in range((int(bottomRight[0])-int(topLeft[0]))//10):
+        for i in range((int(bottomRight[0])-int(topLeft[0]))//blockWidth):
             line.down()
             backup = line.pos()
             line.setpos(line.xcor(), bottomRight[1])
@@ -177,7 +193,6 @@ drawLines(wall_list)
 
 # Changes theme
 
-
 def changeTheme():
     global theme
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -194,15 +209,25 @@ def changeTheme():
     f.write(themeIn)
     f.close()
     setTheme(themeIn)
+
+
+
 # Function to change theme while settings is open
 
-
 def drawSettings():
-    settingsBoi.clear()
-    settingsBoi.setpos(-200, 100)
-    settingsBoi.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align="left")
-    settingsBoi.setpos(-200, 50)
-    settingsBoi.write("2. Lines: "+str(linesOn), font=("Arial", 25, "normal"), align="left")
+    global settingsSpeedCount, gameSpeed
+    settingsTurt.clear()
+    settingsTurt.setpos(-200, 100)
+    settingsTurt.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align="left")
+    settingsTurt.setpos(-200, 50)
+    settingsTurt.write("2. Lines: "+str(linesOn), font=("Arial", 25, "normal"), align="left")
+    settingsTurt.setpos(-200, 0)
+    settingsTurt.write("3. Game Speed: "+str(gameSpeed), font=("Arial", 25, "normal"), align="left")
+    if settingsSpeedCount > 50:
+        window.title("I'm fast as fuck, boi")
+        gameSpeed = 4
+        globalSnakeTiming = 0.019
+    turtle.update()
 
 
 def settingsTheme():
@@ -210,8 +235,8 @@ def settingsTheme():
     drawSettings()
 
 
-# Directly sets theme
 
+# Directly sets theme
 
 def setTheme(thame):
     global theme, snake, cherry, setup, window, drawturt, settingsOpen
@@ -223,7 +248,7 @@ def setTheme(thame):
     drawturt.color(themeList.themes[thame]["text"])
     highscore.color(themeList.themes[thame]["highscore"])
     line.color(themeList.themes[thame]["line"])
-    settingsBoi.color(themeList.themes[thame]["settings"])
+    settingsTurt.color(themeList.themes[thame]["settings"])
 
     scoreify(score)
     drawHighScore()
@@ -330,14 +355,37 @@ count = 0
 
 settingsOpen = False
 
-settingsBoi = turtle.Turtle()
-settingsBoi.speed(0)
-settingsBoi.hideturtle()
-settingsBoi.up()
+settingsTurt = turtle.Turtle()
+settingsTurt.speed(0)
+settingsTurt.hideturtle()
+settingsTurt.up()
 canToggleSettings = True
 
+def shiftGameSpeed():
+    global gameSpeed, globalSnakeTiming, settingsSpeedCount
+    if gameSpeed == 2:
+        gameSpeed = 3
+        globalSnakeTiming = 0.04
+    elif gameSpeed == 3:
+        gameSpeed = 1
+        globalSnakeTiming = 0.1
+    elif gameSpeed == 1:
+        gameSpeed = 2
+        globalSnakeTiming = 0.06
 
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    if sys.platform == "linux" or "darwin":
+        f = open(dir_path+"/speed.txt", "w")
+    elif sys.platform == "win32" or "cygwin":
+        f = open(dir_path+"\\speed.txt", "w")
+
+    f.write(str(gameSpeed))
+    f.close()
+    settingsSpeedCount += 1
+    drawSettings()
+settingsSpeedCount = 0
 def openSettings():
+    global settingsSpeedCount
     global settingsOpen, canToggleSettings
     if canToggleSettings:
         canToggleSettings = False
@@ -358,6 +406,7 @@ def openSettings():
 
         window.onkeypress(settingsTheme, "1")
         window.onkeypress(toggleLines, "2")
+        window.onkeypress(shiftGameSpeed, "3")
         drawSettings()
         turtle.update()
 
@@ -507,7 +556,7 @@ def startDemo():
         setup.clear()
         setup.setpos(0, 200)
 
-        settingsBoi.clear()
+        settingsTurt.clear()
 
         setup.write("PySnake "+returnVersion(2), font=("Arial", 64, "normal"), align="center")
         setup.setpos(0, -250)

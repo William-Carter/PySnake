@@ -1,6 +1,7 @@
 Changelog:
->Fixed gridline saving
+>Added ability to adjust game speed ("3" options)
+>Added spooktober theme that will disappear at month's end. Spooky.
 
 To do:
->Add more settings items (Game speed, etc.)
 >Maybe add more themes
+>More gameplay elements?
