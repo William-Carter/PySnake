@@ -30,10 +30,6 @@ themes = {
 "vaporwave" : {
 "setup" : "#94D0FF", "snake" : "#FF6AD5", "cherry" : "#94D0FF", "background" : "#C774E8",
 "text" : "white", "highscore" : "white", "line" : "white", "settings" : "#94D0FF"
-},
-"spooktober" : {
-"setup" : "#E88A1A", "snake" : "#E88A1A", "cherry" : "#CF3030", "background" : "#141414",
-"text" : "dark gray", "highscore" : "dark gray", "line" : "dark gray", "settings" : "dark gray"
 }
 }
 themeIndex = []

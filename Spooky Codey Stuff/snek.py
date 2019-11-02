@@ -30,7 +30,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
 # Version display function
-pysnakeVersion = (2, 3, 4)
+pysnakeVersion = (2, 3, 5)
 
 
 def returnVersion(precision):
@@ -97,15 +97,18 @@ elif sys.platform == "win32" or "cygwin":
 
 gameSpeed = int(f.read())
 f.close()
-if gameSpeed == 1:
-    globalSnakeTiming = 0.1
-elif gameSpeed == 2:
-    globalSnakeTiming = 0.06
-elif gameSpeed == 3:
-     globalSnakeTiming = 0.04
-elif gameSpeed == 4:
-    globalSnakeTiming = 0.019
 
+def gameSpeedSetup():
+    global globalSnakeTiming
+    if gameSpeed == 1:
+        globalSnakeTiming = 0.1
+    elif gameSpeed == 2:
+        globalSnakeTiming = 0.06
+    elif gameSpeed == 3:
+         globalSnakeTiming = 0.04
+    elif gameSpeed == 4:
+        globalSnakeTiming = 0.019
+gameSpeedSetup()
 rng_seed = 0
 
 # Global turtle setup
@@ -115,7 +118,7 @@ titleString = "PySnake"
 if devmode:
     titleString = "[Dev]Pysnake"
 window.title((titleString, returnVersion(3)))
-turtle.tracer(0, 0)
+window.tracer(0, 0)
 
 # Setup turtles
 setup = turtle.Turtle()
@@ -226,7 +229,7 @@ def drawSettings():
     if settingsSpeedCount > 50:
         window.title("I'm fast as fuck, boi")
         gameSpeed = 4
-        globalSnakeTiming = 0.019
+        gameSpeedSetup()
     turtle.update()
 
 
@@ -365,13 +368,13 @@ def shiftGameSpeed():
     global gameSpeed, globalSnakeTiming, settingsSpeedCount
     if gameSpeed == 2:
         gameSpeed = 3
-        globalSnakeTiming = 0.04
+
     elif gameSpeed == 3:
         gameSpeed = 1
-        globalSnakeTiming = 0.1
+
     elif gameSpeed == 1:
         gameSpeed = 2
-        globalSnakeTiming = 0.06
+    gameSpeedSetup()
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     if sys.platform == "linux" or "darwin":
@@ -391,8 +394,8 @@ def openSettings():
         canToggleSettings = False
         stopDemo()
         line.clear()
-        window.onkeypress(None, "space")
-        window.onkeypress(startDemo, "h")
+        window.onkey(None, "space")
+        window.onkey(startDemo, "h")
         settingsOpen = True
         setup.clear()
         setup.setpos(0, 200)
@@ -404,9 +407,9 @@ def openSettings():
         snake.hideturtle()
         cherry.hideturtle()
 
-        window.onkeypress(settingsTheme, "1")
-        window.onkeypress(toggleLines, "2")
-        window.onkeypress(shiftGameSpeed, "3")
+        window.onkey(settingsTheme, "1")
+        window.onkey(toggleLines, "2")
+        window.onkey(shiftGameSpeed, "3")
         drawSettings()
         turtle.update()
 
@@ -505,8 +508,8 @@ demo = True
 def stopDemo():
     global demo
     demo = False
-    window.onkeypress(None, "h")
-    window.onkeypress(None, "space")
+    window.onkey(None, "h")
+    window.onkey(None, "space")
 
 
 drawturt = turtle.Turtle()
@@ -534,10 +537,12 @@ def startGame():
     noStart = False
 
 
-window.onkeypress(startGame, "space")
-window.onkeypress(openSettings, "h")
+window.onkey(startGame, "space")
+window.onkey(openSettings, "h")
 
 window.listen()
+
+
 
 
 def startDemo():
@@ -548,10 +553,10 @@ def startDemo():
         settingsOpen = False
         snake.showturtle()
         cherry.showturtle()
-        window.onkeypress(startGame, "space")
-        window.onkeypress(openSettings, "h")
-        window.onkeypress(None, "1")
-        window.onkeypress(None, "2")
+        window.onkey(startGame, "space")
+        window.onkey(openSettings, "h")
+        window.onkey(None, "1")
+        window.onkey(None, "2")
         window.listen()
         setup.clear()
         setup.setpos(0, 200)
@@ -728,14 +733,14 @@ snake.clear()
 reset()
 demo = False
 
-window.onkeypress(snakeup, "w")
-window.onkeypress(snakedown, "s")
-window.onkeypress(snakeright, "d")
-window.onkeypress(snakeleft, "a")
+window.onkey(snakeup, "w")
+window.onkey(snakedown, "s")
+window.onkey(snakeright, "d")
+window.onkey(snakeleft, "a")
 
 
-window.onkeypress(None, "h")
-window.onkeypress(None, "1")
+window.onkey(None, "h")
+window.onkey(None, "1")
 dir_path = os.path.dirname(os.path.realpath(__file__))
 file = open(dir_path+"/highscore.txt", "r")
 high_score = int(file.readlines()[1])
@@ -753,10 +758,10 @@ def noClip():
     elif enableNoClip:
         enableNoClip = False
 if devmode:
-    window.onkeypress(changeTheme, "m")
-    window.onkeypress(noClip, "p")
-    window.onkeypress(instaCherry, "c")
-    window.onkeypress(toggleLines, "z")
+    window.onkey(changeTheme, "m")
+    window.onkey(noClip, "p")
+    window.onkey(instaCherry, "c")
+    window.onkey(toggleLines, "z")
 
 
 window.listen()

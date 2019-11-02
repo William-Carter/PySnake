@@ -1,6 +1,6 @@
 Changelog:
->Added ability to adjust game speed ("3" options)
->Added spooktober theme that will disappear at month's end. Spooky.
+>Removed Spooktober theme
+>Updated some internal stuff to work with new Python stuff
 
 To do:
 >Maybe add more themes
