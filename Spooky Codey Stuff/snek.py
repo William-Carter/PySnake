@@ -1,24 +1,31 @@
 # Copyright William Carter 2019
-import turtle
-import random
-import time
-import sys
 import os
+import random
+import sys
+import time
+import turtle
+
 import themeList
+
 opSystem = sys.platform
 devmode = False
 # Error handling cause god knows we need it
 
 
 def bigFatError(inp):
-    turtle.clearscreen()
+    turtle.clear()
     errorReport = turtle.Turtle()
     errorReport.hideturtle()
     errorReport.up()
-    #If I don't wait here everything breaks. Ignore it.
+    # If I don't wait here everything breaks. Ignore it.
     time.sleep(0.3)
-    errorReport.write("Uh oh, someone did a fucky wucky\n"+inp, font=("Arial", 25, "normal"), align="center")
+    errorReport.write(
+        "Uh oh, someone did a fucky wucky\n" + inp,
+        font=("Arial", 25, "normal"),
+        align="center",
+    )
     turtle.update()
+
 
 # Checking for developer mode
 
@@ -29,23 +36,24 @@ if len(sys.argv) > 1:
         bigFatError("Error 745: Unknown argument")
         sys.exit()
 
-# Version display function
+# Version display functions
 pysnakeVersion = (2, 3, 5)
 
 
 def returnVersion(precision):
     global pysnakeVersion
     if precision > len(pysnakeVersion):
-        return("If you're seeing this, William is a dickwad")
+        return "If you're seeing this, William is a dickwad"
         bigFatError("Error 652: Version index out of range")
 
     else:
         empty = ""
-        for i in range(precision-1):
-            empty = empty+str(pysnakeVersion[i])
-            empty = empty+"."
-        empty = empty+str(pysnakeVersion[precision-1])
+        for i in range(precision - 1):
+            empty = empty + str(pysnakeVersion[i])
+            empty = empty + "."
+        empty = empty + str(pysnakeVersion[precision - 1])
         return empty
+
 
 # Variable setup
 
@@ -55,48 +63,98 @@ blockWidth = 10
 
 
 wall_list = [
-     (-50, -50), (-50, -40), (-50, -30), (-50, -20), (-50, -10),
-     (-50, 0), (-50, 10), (-50, 20), (-50, 30), (-50, 40), (-50, 50),
-     (-50, 60), (-50, 70), (-50, 80), (-50, 90), (-50, 100), (-50, 110),
-
-     (110, -50), (110, -40), (110, -30), (110, -20), (110, -10),
-     (110, 0), (110, 10), (110, 20), (110, 30), (110, 40), (110, 50),
-     (110, 60), (110, 70), (110, 80), (110, 90), (110, 100), (110, 110),
-
-     (-40, -50), (-30, -50), (-20, -50), (-10, -50), (0, -50),
-     (10, -50), (20, -50), (30, -50), (40, -50), (50, -50), (60, -50),
-     (70, -50), (80, -50), (90, -50), (100, -50),
-
-    (-40, 110), (-30, 110), (-20, 110), (-10, 110), (0, 110),
-     (10, 110), (20, 110), (30, 110), (40, 110), (50, 110), (60, 110),
-     (70, 110), (80, 110), (90, 110), (100, 110)
-     ]
+    (-50, -50),
+    (-50, -40),
+    (-50, -30),
+    (-50, -20),
+    (-50, -10),
+    (-50, 0),
+    (-50, 10),
+    (-50, 20),
+    (-50, 30),
+    (-50, 40),
+    (-50, 50),
+    (-50, 60),
+    (-50, 70),
+    (-50, 80),
+    (-50, 90),
+    (-50, 100),
+    (-50, 110),
+    (110, -50),
+    (110, -40),
+    (110, -30),
+    (110, -20),
+    (110, -10),
+    (110, 0),
+    (110, 10),
+    (110, 20),
+    (110, 30),
+    (110, 40),
+    (110, 50),
+    (110, 60),
+    (110, 70),
+    (110, 80),
+    (110, 90),
+    (110, 100),
+    (110, 110),
+    (-40, -50),
+    (-30, -50),
+    (-20, -50),
+    (-10, -50),
+    (0, -50),
+    (10, -50),
+    (20, -50),
+    (30, -50),
+    (40, -50),
+    (50, -50),
+    (60, -50),
+    (70, -50),
+    (80, -50),
+    (90, -50),
+    (100, -50),
+    (-40, 110),
+    (-30, 110),
+    (-20, 110),
+    (-10, 110),
+    (0, 110),
+    (10, 110),
+    (20, 110),
+    (30, 110),
+    (40, 110),
+    (50, 110),
+    (60, 110),
+    (70, 110),
+    (80, 110),
+    (90, 110),
+    (100, 110),
+]
 
 # Initial theme setup
 dir_path = os.path.dirname(os.path.realpath(__file__))
 if sys.platform == "linux" or "darwin":
-    f = open(dir_path+"/theme.txt", "r+")
+    f = open(dir_path + "/theme.txt", "r+")
 elif sys.platform == "win32" or "cygwin":
-    f = open(dir_path+"\\theme.txt", "r")
+    f = open(dir_path + "\\theme.txt", "r")
 
 theme = f.read()
 f.close()
 
 if sys.platform == "linux" or "darwin":
-    f = open(dir_path+"/line.txt", "r+")
+    f = open(dir_path + "/line.txt", "r+")
 elif sys.platform == "win32" or "cygwin":
-    f = open(dir_path+"\\line.txt", "r")
+    f = open(dir_path + "\\line.txt", "r")
 
 linesOn = f.read()
 f.close()
 
 if sys.platform == "linux" or "darwin":
-    f = open(dir_path+"/speed.txt", "r+")
+    f = open(dir_path + "/speed.txt", "r+")
 elif sys.platform == "win32" or "cygwin":
-    f = open(dir_path+"\\speed.txt", "r")
+    f = open(dir_path + "\\speed.txt", "r")
 
 gameSpeed = int(f.read())
 f.close()
+
 
 def gameSpeedSetup():
     global globalSnakeTiming
@@ -105,9 +163,11 @@ def gameSpeedSetup():
     elif gameSpeed == 2:
         globalSnakeTiming = 0.06
     elif gameSpeed == 3:
-         globalSnakeTiming = 0.04
+        globalSnakeTiming = 0.04
     elif gameSpeed == 4:
         globalSnakeTiming = 0.019
+
+
 gameSpeedSetup()
 rng_seed = 0
 
@@ -133,8 +193,8 @@ line.up()
 line.hideturtle()
 
 
-
 # Draws walls
+
 
 def drawBoundary():
     global setup
@@ -146,6 +206,7 @@ def drawBoundary():
 
 
 # Gay ass function to draw lines using the same input as drawboundary
+
 
 def drawLines(lis):
     line.clear()
@@ -166,27 +227,27 @@ def drawLines(lis):
     bottomRight = (maxX, minY)
     line.setpos(topLeft)
     line.seth(0)
-    line.setx(line.xcor()+(blockWidth/2))
+    line.setx(line.xcor() + (blockWidth / 2))
     if linesOn == "True":
-        for i in range((int(bottomRight[0])-int(topLeft[0]))//blockWidth):
+        for i in range((int(bottomRight[0]) - int(topLeft[0])) // blockWidth):
             line.down()
             backup = line.pos()
             line.setpos(line.xcor(), bottomRight[1])
             line.up()
             line.setpos(backup)
-            line.setpos(line.xcor()+blockWidth, line.ycor())
+            line.setpos(line.xcor() + blockWidth, line.ycor())
 
         line.setpos(topLeft)
         line.seth(0)
-        line.sety(line.ycor()-5)
+        line.sety(line.ycor() - 5)
         line.down()
-        for j in range((int(topLeft[1])-int(bottomRight[1]))//10):
+        for j in range((int(topLeft[1]) - int(bottomRight[1])) // 10):
             line.down()
             backup = line.pos()
             line.setpos(bottomRight[0], line.ycor())
             line.up()
             line.setpos(backup)
-            line.setpos(line.xcor(), line.ycor()-blockWidth)
+            line.setpos(line.xcor(), line.ycor() - blockWidth)
 
         drawBoundary()
 
@@ -196,17 +257,18 @@ drawLines(wall_list)
 
 # Changes theme
 
+
 def changeTheme():
     global theme
     dir_path = os.path.dirname(os.path.realpath(__file__))
     if sys.platform == "linux" or "darwin":
-        f = open(dir_path+"/theme.txt", "w")
+        f = open(dir_path + "/theme.txt", "w")
     elif sys.platform == "win32" or "cygwin":
-        f = open(dir_path+"\\theme.txt", "w")
+        f = open(dir_path + "\\theme.txt", "w")
 
     currentVal = themeList.themeIndex.index(theme)
     if not currentVal + 1 == len(themeList.themeIndex):
-        themeIn = themeList.themeIndex[currentVal+1]
+        themeIn = themeList.themeIndex[currentVal + 1]
     else:
         themeIn = themeList.themeIndex[0]
     f.write(themeIn)
@@ -214,18 +276,22 @@ def changeTheme():
     setTheme(themeIn)
 
 
-
 # Function to change theme while settings is open
+
 
 def drawSettings():
     global settingsSpeedCount, gameSpeed
     settingsTurt.clear()
     settingsTurt.setpos(-200, 100)
-    settingsTurt.write("1. Theme: "+theme, font=("Arial", 25, "normal"), align="left")
+    settingsTurt.write("1. Theme: " + theme, font=("Arial", 25, "normal"), align="left")
     settingsTurt.setpos(-200, 50)
-    settingsTurt.write("2. Lines: "+str(linesOn), font=("Arial", 25, "normal"), align="left")
+    settingsTurt.write(
+        "2. Lines: " + str(linesOn), font=("Arial", 25, "normal"), align="left"
+    )
     settingsTurt.setpos(-200, 0)
-    settingsTurt.write("3. Game Speed: "+str(gameSpeed), font=("Arial", 25, "normal"), align="left")
+    settingsTurt.write(
+        "3. Game Speed: " + str(gameSpeed), font=("Arial", 25, "normal"), align="left"
+    )
     if settingsSpeedCount > 50:
         window.title("I'm fast as fuck, boi")
         gameSpeed = 4
@@ -238,8 +304,8 @@ def settingsTheme():
     drawSettings()
 
 
-
 # Directly sets theme
+
 
 def setTheme(thame):
     global theme, snake, cherry, setup, window, drawturt, settingsOpen
@@ -364,6 +430,7 @@ settingsTurt.hideturtle()
 settingsTurt.up()
 canToggleSettings = True
 
+
 def shiftGameSpeed():
     global gameSpeed, globalSnakeTiming, settingsSpeedCount
     if gameSpeed == 2:
@@ -378,15 +445,19 @@ def shiftGameSpeed():
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     if sys.platform == "linux" or "darwin":
-        f = open(dir_path+"/speed.txt", "w")
+        f = open(dir_path + "/speed.txt", "w")
     elif sys.platform == "win32" or "cygwin":
-        f = open(dir_path+"\\speed.txt", "w")
+        f = open(dir_path + "\\speed.txt", "w")
 
     f.write(str(gameSpeed))
     f.close()
     settingsSpeedCount += 1
     drawSettings()
+
+
 settingsSpeedCount = 0
+
+
 def openSettings():
     global settingsSpeedCount
     global settingsOpen, canToggleSettings
@@ -416,6 +487,7 @@ def openSettings():
 
 rng_seed = 0
 
+
 def toggleLines():
     global linesOn
     if linesOn == "True":
@@ -428,9 +500,9 @@ def toggleLines():
         drawLines(wall_list)
 
     if sys.platform == "linux" or "darwin":
-        f = open(dir_path+"/line.txt", "w")
+        f = open(dir_path + "/line.txt", "w")
     elif sys.platform == "win32" or "cygwin":
-        f = open(dir_path+"\\line.txt", "w")
+        f = open(dir_path + "\\line.txt", "w")
     f.write(str(linesOn))
     f.close()
 
@@ -526,7 +598,11 @@ def gameover():
     drawturt.setpos(0, 200)
     drawturt.write("Game Over", font=("Arial", 64, "normal"), align="center")
     drawturt.setpos(0, 150)
-    drawturt.write("You Scored "+str(score)+" points", font=("Arial", 32, "normal"), align="center")
+    drawturt.write(
+        "You Scored " + str(score) + " points",
+        font=("Arial", 32, "normal"),
+        align="center",
+    )
     time.sleep(1)
     drawturt.clear()
 
@@ -541,8 +617,6 @@ window.onkey(startGame, "space")
 window.onkey(openSettings, "h")
 
 window.listen()
-
-
 
 
 def startDemo():
@@ -563,11 +637,17 @@ def startDemo():
 
         settingsTurt.clear()
 
-        setup.write("PySnake "+returnVersion(2), font=("Arial", 64, "normal"), align="center")
+        setup.write(
+            "PySnake " + returnVersion(2), font=("Arial", 64, "normal"), align="center"
+        )
         setup.setpos(0, -250)
-        setup.write("Press Space to Start", font=("Arial", 32, "normal"), align="center")
+        setup.write(
+            "Press Space to Start", font=("Arial", 32, "normal"), align="center"
+        )
         setup.setpos(0, -300)
-        setup.write("Press H for Settings", font=("Arial", 24, "normal"), align="center")
+        setup.write(
+            "Press H for Settings", font=("Arial", 24, "normal"), align="center"
+        )
 
         drawBoundary()
         setTheme(theme)
@@ -651,8 +731,10 @@ highscore.up()
 
 def newHighScore():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    f = open(dir_path+"/highscore.txt", "w")
-    f.write("#If you're going to cheat, at least bloody modify the code to do it. Don't be lazy.\n")
+    f = open(dir_path + "/highscore.txt", "w")
+    f.write(
+        "#If you're going to cheat, at least bloody modify the code to do it. Don't be lazy.\n"
+    )
     f.write(str(high_score))
     f.close()
 
@@ -680,6 +762,8 @@ startDemo()
 noStart = True
 demoCounter = 0
 canToggleSettings = False
+
+
 def aiChoice():
 
     if round(snake.xcor(), 0) < cherryList[0][0]:
@@ -707,7 +791,6 @@ while noStart:
         time.sleep(0.03)
         snake.setpos(round(snake.xcor(), 2), round(snake.ycor(), 2))
         aiChoice()
-
 
         democheckCollision()
         if not cherryThisTurn():
@@ -742,7 +825,7 @@ window.onkey(snakeleft, "a")
 window.onkey(None, "h")
 window.onkey(None, "1")
 dir_path = os.path.dirname(os.path.realpath(__file__))
-file = open(dir_path+"/highscore.txt", "r")
+file = open(dir_path + "/highscore.txt", "r")
 high_score = int(file.readlines()[1])
 file.close()
 score = 0
@@ -757,6 +840,8 @@ def noClip():
         enableNoClip = True
     elif enableNoClip:
         enableNoClip = False
+
+
 if devmode:
     window.onkey(changeTheme, "m")
     window.onkey(noClip, "p")
@@ -776,7 +861,7 @@ while True:
     snake.forward(blockWidth)
     globalTickCounter += 1
     time.sleep(globalSnakeTiming)
-    snake.setpos(round(snake.xcor(), 0), round(snake.ycor(),  0))
+    snake.setpos(round(snake.xcor(), 0), round(snake.ycor(), 0))
     checkCollision()
     if not cherryThisTurn():
         removeLastStamp()
