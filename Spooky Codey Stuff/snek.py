@@ -133,7 +133,6 @@ wall_list = [
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
-
 if sys.platform == "linux" or "darwin":
     f = open(dir_path + "/theme.txt", "r+")
 elif sys.platform == "win32" or "cygwin":
@@ -179,8 +178,9 @@ window = turtle.Screen()
 
 titleString = "PySnake"
 if devmode:
-    titleString = titleString+"[Dev]"
-window.title((titleString, returnVersion(3)))
+    titleString = titleString + "[Dev]"
+print(titleString)
+window.title((titleString + " " + str(returnVersion(3))))
 window.tracer(0, 0)
 
 # Setup turtles
@@ -251,8 +251,6 @@ def drawLines(lis):
             line.up()
             line.setpos(backup)
             line.setpos(line.xcor(), line.ycor() - blockWidth)
-
-        
 
 
 drawLines(wall_list)
@@ -338,9 +336,6 @@ def setTheme(thame):
         setup.write("Settings", font=("Arial", 32, "normal"), align="center")
         setup.setpos(0, -250)
         setup.write("Press H to return", font=("Arial", 32, "normal"), align="center")
-
-
-drawBoundary()
 
 
 def drawSnake():
