@@ -443,9 +443,9 @@ def shiftGameSpeed():
     gameSpeedSetup()
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    if sys.platform == "linux" or "darwin":
+    if sys.platform == "linux" or sys.platform == "darwin":
         f = open(dir_path + "/speed.txt", "w")
-    elif sys.platform == "win32" or "cygwin":
+    elif sys.platform == "win32" or sys.platform == "cygwin":
         f = open(dir_path + "\\speed.txt", "w")
 
     f.write(str(gameSpeed))
@@ -498,7 +498,7 @@ def toggleLines():
     else:
         drawLines(wall_list)
 
-    if sys.platform == "linux" or "darwin":
+    if sys.platform == "linux" or sys.platform == "darwin":
         f = open(dir_path + "/line.txt", "w")
     elif sys.platform == "win32" or "cygwin":
         f = open(dir_path + "\\line.txt", "w")
@@ -690,9 +690,6 @@ def reset():
     cherry.clearstamps()
     cherryList = []
     if score > high_score:
-        if score > 400:
-            print("cheater")
-
         if not devmode:
             high_score = score
             newHighScore()
@@ -730,7 +727,10 @@ highscore.up()
 
 def newHighScore():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    f = open(dir_path + "/highscore.txt", "w")
+    if sys.platform == "linux" or sys.platform == "darwin":
+        f = open(dir_path + "/highscore.txt", "w")
+    elif sys.platform == "win32" or sys.platform == "cygwin":
+        f = open(dir_path + "\\highscore.txt", "w")
     f.write(
         "#If you're going to cheat, at least bloody modify the code to do it. Don't be lazy.\n"
     )
