@@ -37,7 +37,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
 # Version display functions
-pysnakeVersion = (2, 3, 5)
+pysnakeVersion = (2, 3, 6)
 
 
 def returnVersion(precision):

@@ -1,7 +1,5 @@
 Changelog:
->Removed Spooktober theme
->Updated some internal stuff to work with new Python stuff
+>Fixed dumb dumb stupid nightmarre fucking retard bug dumb thing windows file crap 
 
 To do:
->Maybe add more themes
->More gameplay elements?
+>Die
